@@ -15,7 +15,7 @@ class Fishs extends Component {
     const testData = [1, 2, 3, 4];
 
     const data = await getUserList();
-    console.log('获取到的数据', data, testData);
+    console.log('获取到的数据888', data, testData);
   };
 
   // 新增用户
