@@ -1,0 +1,13 @@
+.Layout {
+  display: flex;
+  .layout-left {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    border-right: 1px solid #f00;
+  }
+  .layout-right {
+    display: flex;
+    flex: 1;
+  }
+}

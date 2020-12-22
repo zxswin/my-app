@@ -1,0 +1,10 @@
+.Fishs {
+  display: flex;
+  flex-direction: column;
+
+  .fishs_content-input {
+    border: 1px solid #ccc;
+    margin-top: 30px;
+    height: 300px;
+  }
+}

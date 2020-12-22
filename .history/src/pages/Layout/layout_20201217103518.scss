@@ -1,0 +1,18 @@
+.Layout {
+  display: flex;
+  .layout-left {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    border-right: 1px solid #000;
+    justify-content: center;
+  }
+  .layout-right {
+    display: flex;
+    flex: 1;
+    border: 1px solid #f00;
+  }
+  .active-select {
+    color: red;
+  }
+}

@@ -1,0 +1,22 @@
+.Fishs {
+  display: flex;
+  flex-direction: column;
+
+  .fishs_content-input {
+    border: 1px solid #ccc;
+    margin-top: 30px;
+    height: 300px;
+  }
+
+  .checked_box {
+    label {
+      position: relative;
+      display: block;
+      width: 24px;
+      padding: 5px;
+      background-color: #eee;
+      cursor: pointer;
+      border: 1px solid #f00;
+    }
+  }
+}

@@ -1,0 +1,9 @@
+.Fishs {
+  display: flex;
+  flex-direction: column;
+
+  .fishs_content-input {
+    border: 1px solid #ccc;
+    padding-top: 30px;
+  }
+}

@@ -1,0 +1,11 @@
+.Layout {
+  display: flex;
+  .layout-left {
+    display: flex;
+    flex-direction: column;
+  }
+  .layout-right {
+    display: flex;
+    flex: 1;
+  }
+}

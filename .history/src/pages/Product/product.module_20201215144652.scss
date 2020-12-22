@@ -1,0 +1,7 @@
+.Product {
+  display: flex;
+  flex-direction: column;
+  .product-nav {
+    border-bottom: 1px solid #f00;
+  }
+}
