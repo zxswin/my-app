@@ -12,8 +12,10 @@ class Fishs extends Component {
 
   // 查询用户列表
   queryUserList = async () => {
+    const testData = [1, 2, 3, 4];
+
     const data = await getUserList();
-    console.log('获取到的数据', data);
+    console.log('获取到的数据', data, testData);
   };
 
   // 新增用户
