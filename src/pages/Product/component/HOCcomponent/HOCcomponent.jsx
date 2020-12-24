@@ -21,6 +21,7 @@ const Mycontainer = WrappedComponent => {
   };
 };
 
+@Mycontainer
 class HOCcomponent extends Component {
   constructor(props) {
     super(props);
@@ -49,4 +50,4 @@ class HOCcomponent extends Component {
   }
 }
 
-export default Mycontainer(HOCcomponent);
+export default HOCcomponent;
