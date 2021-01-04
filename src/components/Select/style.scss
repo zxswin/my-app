@@ -1,0 +1,100 @@
+@import '../../static/style/css-public.color.scss';
+@import '../../static/style/css-public.size.scss';
+@import '../../static/style/css-public.scss';
+
+$options-contain-height: 150px;
+
+.UISelect {
+  width: 100%;
+  .UISelect_input-contain {
+    margin-bottom: 5px;
+    position: relative;
+    input {
+      @include defaultInput();
+      padding-left: 10px;
+      &:disabled {
+        background-color: $white;
+      }
+    }
+    .UISelect_input-contain--arrow {
+      background-color: $bdgrey;
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      mask-image: url(../../static/icon/menu/icon-arrow.svg);
+      mask-position: center;
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      top: 6px;
+      right: 8px;
+    }
+  }
+  .UISelect_options-contain {
+    outline: 1px solid $border-color-default;
+    max-height: $options-contain-height;
+    overflow-y: auto;
+    .UISelect_options-contain--empty {
+      height: 100px;
+      @include flex-row-center;
+      span {
+        width: 60px;
+        height: 60px;
+        mask-image: url(../../static/icon/ui/icon-empty.svg);
+        mask-size: contain;
+        mask-position: center;
+        mask-repeat: no-repeat;
+        background-color: $bdgrey;
+      }
+    }
+    .UISelect_options-contain--li {
+      @include flex-row-between();
+      padding: 0 10px;
+      height: $input-height-default;
+      cursor: pointer;
+      &:hover {
+        background-color: $bg-disabled;
+      }
+      &.active {
+        background-color: rgba($primary, 0.2);
+        font-weight: 500;
+        &:hover {
+          background-color: rgba($primary, 0.2);
+        }
+      }
+    }
+
+    .UISelect_options-contain--check {
+      background-color: $primary;
+      width: 20px;
+      height: 20px;
+      mask-image: url(../../static/icon/ui/icon-check.svg);
+      mask-position: center;
+      mask-size: contain;
+      mask-repeat: no-repeat;
+    }
+  }
+
+  /* 动画部分 */
+  .boss-text-enter {
+    height: 0;
+    overflow: hidden;
+  }
+  .boss-text-enter-active {
+    height: $options-contain-height;
+    transition: all 0.2s ease-in;
+  }
+  .boss-text-enter-done {
+    height: $options-contain-height;
+  }
+  .boss-text-exit {
+    height: $options-contain-height;
+    overflow: hidden;
+  }
+  .boss-text-exit-active {
+    height: 0;
+    transition: all 0.2s ease-in;
+  }
+  .boss-text-exit-done {
+    height: 0;
+  }
+}

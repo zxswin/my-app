@@ -10,6 +10,7 @@ $disabled: rgba(0, 0, 0, 0.25); // 禁用颜色
 $bgdisabled: rgb(245, 245, 245);
 $bgmark: #ffe58f; // 标记背景颜色
 $grey: #f2f4f5; // 灰色
+$bdgrey: #d9d9d9; // 边框色
 $white: #fff; // 白色
 
 /* 背景颜色 */
@@ -18,8 +19,9 @@ $bg-disabled: $bgdisabled; // 禁用背景色
 $bg-mark: $bgmark; // 标记背景颜色
 
 /* 边框颜色 */
+$border-color-default: $bdgrey; // 默认边框颜色
 $boder-color-grey: #f0f0f0; // 灰色边框色
-$boder-color-disabled: #d9d9d9; // 禁用边框色
+$boder-color-disabled: $bdgrey; // 禁用边框色
 
 /* 字体颜色 */
 $font-color-main: $default; // 主要文字颜色

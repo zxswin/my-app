@@ -1,3 +1,6 @@
+@import './css-public.color.scss';
+@import './css-public.size.scss';
+
 /*公共方法*/
 @mixin clear {
   clear: both;
@@ -16,4 +19,74 @@
 }
 @mixin cursor {
   cursor: pointer;
+}
+
+/* flex布局 */
+@mixin layoutflex {
+  display: flex;
+}
+
+@mixin flex-row {
+  @include layoutflex();
+  flex-direction: row;
+}
+
+@mixin flex-column {
+  @include layoutflex();
+  flex-direction: column;
+}
+
+@mixin flex-row-start {
+  @include flex-row();
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+@mixin flex-column-start {
+  @include flex-column();
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+@mixin flex-row-center {
+  @include flex-row();
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-column-center {
+  @include flex-column();
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-row-between {
+  @include flex-row();
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin flex-column-between {
+  @include flex-column();
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* input 默认样式 */
+@mixin defaultInput {
+  width: 100%;
+  height: $input-height-default;
+  outline: 1px solid $border-color-default;
+  transition: all 0.3 ease;
+
+  &:hover {
+    outline: 1px solid $primary;
+  }
+  &:focus {
+    outline: 1px solid $primary;
+    box-shadow: 0 0 1px 3px rgba($primary, 0.3);
+  }
+  &:disabled {
+    background-color: $bg-disabled;
+  }
 }

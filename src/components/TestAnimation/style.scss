@@ -1,0 +1,15 @@
+.TestAnimation {
+  .text-contain {
+    border: 1px solid #f00;
+    overflow: hidden;
+  }
+  .show {
+    height: 300px;
+    transition: all 1s ease-in;
+  }
+
+  .hide {
+    height: 0;
+    transition: all 1s ease-in;
+  }
+}

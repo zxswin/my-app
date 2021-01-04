@@ -5,6 +5,7 @@
 ```tsx
 /**
  * BrowserRouter主要使用在浏览器中，也就是WEB应用中。
+ * <a> 标签中不能嵌套 <a>标签
  */
 
 // 1.basename 属性
@@ -409,6 +410,7 @@ export default App;
 ```tsx
 /**
  * 第一种传参方式；通过params
+ * 必须包在<Switch> 组件里面才可以获取到路由参数
  */
 
 // 在路由组件中获取参数 props里面包含了location history match staticContext等参数
@@ -607,4 +609,306 @@ class Layout extends Component {
 }
 
 export default Layout;
+```
+
+## 使用配置文件的形式来组织路由
+
+### 路由配置部分
+
+- product.router.config.js
+
+```ts
+import Fishs from '../../pages/Product/modules/Fishs';
+import Vegetables from '../../pages/Product/modules/Vegetables';
+
+// 产品模块路由配置
+const produceRouterConfig = [
+  {
+    title: '鱼类中心',
+    path: '/home/product/fishs',
+    component: Fishs,
+    auth: false,
+  },
+  {
+    title: '蔬菜中心',
+    path: '/home/product/vegetables',
+    component: Vegetables,
+    auth: false,
+  },
+];
+
+export default produceRouterConfig;
+```
+
+- home.router.config.js
+
+```js
+import { lazy } from 'react';
+import produceRouterConfig from './product.router.config';
+// const ProductPromise = import('../../pages/Product');
+// const OrderPromise = import('../../pages/Order');
+import Welcome from '../../pages/Welcome';
+const Product = lazy(() => import('../../pages/Product'));
+const Order = lazy(() => import('../../pages/Order'));
+
+// 主页子路由配置
+const homeRouterConfig = [
+  // 欢迎界面
+  {
+    title: '主界面',
+    path: '/home/welcome',
+    component: Welcome,
+    auth: false,
+  },
+  // 产品页面
+  {
+    title: '产品中心',
+    path: '/home/product',
+    component: Product,
+    auth: false,
+    // 产品页面下面的子页面
+    children: produceRouterConfig,
+  },
+  // 订单页面
+  {
+    title: '订单中心',
+    path: '/home/order',
+    component: Order,
+    auth: false,
+  },
+];
+
+export default homeRouterConfig;
+```
+
+- router.config.js
+
+```ts
+import { lazy } from 'react';
+import Login from '../../pages/Login';
+import NoFound from '../../pages/NoFound';
+import homeRouterConfig from './home.router.config';
+const Welcome = lazy(() => import('../../pages/Welcome'));
+
+// 整体路由配置
+const routerConfig = [
+  {
+    title: '登录页',
+    path: '/login',
+    component: Login,
+    auth: false,
+  },
+  // 主页
+  {
+    title: '主页',
+    path: '/',
+    component: Welcome,
+    auth: false,
+  },
+  {
+    title: '主页',
+    path: '/home',
+    component: Welcome,
+    auth: false,
+    // 家页面下面的子路由
+    children: homeRouterConfig,
+  },
+  // 找不到相关页面展示页
+  {
+    title: '未找到任何页面',
+    path: null,
+    component: NoFound,
+    auth: false,
+  },
+];
+
+export default routerConfig;
+```
+
+### 进行路由守卫及决定展示那个路由
+
+- RouterSwitch
+
+```jsx
+import { Suspense } from 'react';
+import { Route } from 'react-router-dom';
+import NoFound from '../../pages/NoFound';
+import Login from '../../pages/Login';
+import Welcome from '../../pages/Welcome';
+import RouterNavLink from '../../components/RouterNavLink';
+import RouterSubLink from '../../components/RouterSubLink';
+import './style.scss';
+
+const RouterSwitch = (props) => {
+  const { location, config, homeRouterConfig } = props;
+  const { pathname } = location;
+  const isLogin = true; // 是否为登录状态
+
+  console.log('pathname', pathname);
+
+  // 获取当前路由的路由配置
+  const targetRouterConfig = config.find((router) => router.path === pathname);
+
+  // 如果当前未登录则跳转到登录界面
+  if (!isLogin || pathname === '/login') {
+    return <Route path="/" component={Login} />;
+  }
+
+  // 已经登录
+  if (targetRouterConfig) {
+    const { component } = targetRouterConfig;
+
+    return (
+      <Suspense fallback={<div>加载中……</div>}>
+        <div className="RouterSwitch">
+          <RouterNavLink location={location} routerConfig={homeRouterConfig} />
+          <div className="router-switch-contain">
+            <RouterSubLink
+              location={location}
+              routerConfig={homeRouterConfig}
+            />
+            {/* 访问根目录如果是已经登录状态则直接跳转到主页 */}
+            {pathname === '/' ? (
+              <Route path="/" component={Welcome} />
+            ) : (
+              <Route path={pathname} component={component} />
+            )}
+          </div>
+        </div>
+      </Suspense>
+    );
+  } else {
+    // 没有找到任何界面
+    return <Route component={NoFound} />;
+  }
+};
+
+export default RouterSwitch;
+```
+
+- RouterNavLink 路由左侧一级导航栏
+
+```jsx
+import { NavLink } from 'react-router-dom';
+import './style.scss';
+
+const RouterNavLink = (props) => {
+  const { location, routerConfig } = props;
+  const { pathname } = location;
+
+  const filterRouter = routerConfig.find((routerItem) => {
+    return (
+      pathname.includes(routerItem.path) &&
+      pathname !== '/home' &&
+      !pathname.includes('/welcome')
+    );
+  });
+
+  // 当前模块的主路径
+  const mainPath = filterRouter ? filterRouter.path : '';
+
+  console.log('mainPath', mainPath);
+
+  return (
+    <div className="RouterNavLink">
+      {routerConfig.map((routerItem) => (
+        <div
+          key={`${routerItem.title}${routerItem.path}`}
+          className="nav-link-item"
+        >
+          <NavLink
+            to={routerItem.path}
+            exact
+            /* 设置激活路径样式包括默认激活 */
+            className={
+              pathname.includes(routerItem.path) ? 'active-select' : ''
+            }
+            activeClassName="active-select"
+          >
+            {routerItem.title}
+          </NavLink>
+          {routerItem.children && (
+            <ul>
+              {routerItem.children.map((childItem, index) => (
+                <li key={`${childItem.path}${childItem.title}`}>
+                  <NavLink
+                    to={childItem.path}
+                    exact
+                    /* 设置激活路径样式包括默认激活 */
+                    className={
+                      childItem.path.includes(mainPath) &&
+                      childItem.path.includes(pathname) &&
+                      mainPath !== '' &&
+                      index === 0
+                        ? 'active-select'
+                        : ''
+                    }
+                    activeClassName="active-select"
+                  >
+                    {childItem.title}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default RouterNavLink;
+```
+
+- RouterSubLink 左侧子导航栏部分
+
+```jsx
+import { NavLink } from 'react-router-dom';
+import './style.scss';
+const RouterSubLink = (props) => {
+  const { location, routerConfig } = props;
+  const { pathname } = location;
+
+  const filterRouter = routerConfig.find((routerItem) => {
+    return (
+      pathname.includes(routerItem.path) &&
+      pathname !== '/home' &&
+      !pathname.includes('/welcome')
+    );
+  });
+
+  // 当前模块的主路径
+  const mainPath = filterRouter ? filterRouter.path : '';
+  let subRouterList = [];
+
+  if (filterRouter && Array.isArray(filterRouter.children)) {
+    subRouterList = filterRouter.children;
+  }
+
+  return (
+    <div className="RouterSubLink">
+      {/* 渲染二级路由 */}
+      {subRouterList.map((routerItem, index) => (
+        <div
+          key={`${routerItem.path}${routerItem.title}`}
+          className="subnav-link-item"
+        >
+          <NavLink
+            to={routerItem.path}
+            /* 设置激活路径样式包括默认激活 */
+            className={
+              mainPath === pathname && index === 0 ? 'active-select' : ''
+            }
+            exact
+            activeClassName="active-select"
+          >
+            {routerItem.title}
+          </NavLink>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default RouterSubLink;
 ```

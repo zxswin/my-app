@@ -210,6 +210,15 @@ td {
   margin: 0px;
   padding: 0px;
   box-sizing: border-box;
+  &:focus {
+    border: none;
+    outline: none;
+  }
+}
+input,
+textarea {
+  box-sizing: border-box;
+  border: none;
 }
 html,
 body {
