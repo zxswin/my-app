@@ -1,0 +1,121 @@
+@import '../../../static/style/css-public.color.scss';
+@import '../../../static/style/css-public.size.scss';
+$menu-item-height: 50px;
+$menu-padding-right: 15px;
+$menu-font-size: 18px;
+$menu-sub-font-size: 16px;
+
+.RouterNavLink {
+  width: 300px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-right: $menu-padding-right;
+  border-right: 1px solid $boder-color-grey;
+  overflow: auto;
+  .nav-link-item {
+    display: flex;
+    color: #000;
+    flex-direction: column;
+    width: 100%;
+
+    .link-menu-submenu {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+
+      .link-menu-title {
+        width: 100%;
+        font-size: $menu-font-size;
+        height: $menu-item-height;
+        border: 1px solid $boder-color-grey;
+        border-right: none;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        .link-menu-icon {
+          background: $secondary;
+          mask-repeat: no-repeat;
+          mask-position: center;
+          mask-size: contain;
+          margin-left: 10px;
+        }
+
+        .link-menu-icon-home {
+          width: 30px;
+          height: 30px;
+          mask-image: url(../../../static/icon/menu/icon-home.svg);
+        }
+
+        .link-menu-icon-product {
+          width: 36px;
+          height: 36px;
+          mask-image: url(../../../static/icon/menu/icon-product.svg);
+        }
+        .link-menu-icon-order {
+          width: 26px;
+          height: 26px;
+          mask-image: url(../../../static/icon/menu/icon-order.svg);
+        }
+
+        .icon-arrow-size {
+          width: 18px;
+          height: 18px;
+        }
+        .link-menu-icon-arrow {
+          mask-image: url(../../../static/icon/menu/icon-arrow.svg);
+          margin-right: 10px;
+        }
+        .icon-arrow-up {
+          transform: rotate(-180deg);
+        }
+      }
+    }
+
+    .link-menu-sub-contain {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      overflow: hidden;
+      li {
+        width: 100%;
+        cursor: pointer;
+      }
+      .link-menu-sub-item {
+        display: block;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        height: 30px;
+        padding: 5px 20px;
+      }
+      .link-menu-sub-title {
+        font-size: $menu-sub-font-size;
+      }
+    }
+
+    .hide-sub {
+      height: 0;
+    }
+
+    /* 路由激活状态下的样式 */
+    .active-select {
+      color: $primary;
+      .link-menu-icon {
+        background: $primary !important;
+      }
+
+      &.link-menu-sub-item {
+        border-right: 5px solid $primary;
+        background-color: rgba($primary, 0.1);
+      }
+    }
+  }
+}

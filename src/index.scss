@@ -1,1 +1,15 @@
-@import './public//style/index.scss';
+@import './static/style/index.scss';
+
+.App {
+  width: 100vw;
+  height: 100vh;
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  color: $default;
+  font-size: $font-size-main;
+
+  a {
+    color: $default;
+  }
+}

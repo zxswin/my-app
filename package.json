@@ -83,5 +83,6 @@
     "source-map-explorer": "^2.5.1",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "yarn": "^1.22.10"
-  }
+  },
+  "license": "MIT"
 }

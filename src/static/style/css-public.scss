@@ -1,0 +1,19 @@
+/*公共方法*/
+@mixin clear {
+  clear: both;
+}
+@mixin clearleft {
+  clear: left;
+}
+@mixin clearright {
+  clear: right;
+}
+@mixin floatleft {
+  float: left;
+}
+@mixin floatright {
+  float: right;
+}
+@mixin cursor {
+  cursor: pointer;
+}

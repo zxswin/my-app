@@ -1,0 +1,21 @@
+@import '../../static/style/css-public.color.scss';
+@import '../../static/style/css-public.size.scss';
+
+/* 主页容器 */
+.MainContent {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  height: 100vh;
+
+  .MainContent-main {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    margin-bottom: $bottom-size-main;
+    .MainContent-contain {
+      flex: 1;
+    }
+  }
+}
