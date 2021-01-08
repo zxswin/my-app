@@ -255,8 +255,11 @@ const Table = props => {
 
       mainTableThCollect.forEach((el, index) => {
         const computeStyle = window.getComputedStyle(el);
+        fixedTableRef.current.style.height = computeStyle.height;
         config.columns[index].width = computeStyle.width;
+        config.columns[index].height = computeStyle.height;
         fixedTableThCollect[index].style.width = computeStyle.width;
+        fixedTableThCollect[index].style.height = computeStyle.height;
       });
       setShowFixHeader(true);
     }
@@ -269,7 +272,7 @@ const Table = props => {
   // 渲染表头单元格
   const ColumnEl = props => {
     const { column } = props;
-    const widthStyle = column.width ? { width: column.width } : {};
+    const widthStyle = column.width ? { width: column.width, height: column.height } : {};
     return (
       <th onClick={() => changeFieldSore(column)} style={widthStyle}>
         {column.checkbox ? (
@@ -315,6 +318,7 @@ const Table = props => {
         'contain-hide': !showFixHeader,
         'contain-show': showFixHeader,
       });
+      containStyle.height = columnsData[0].height;
     }
 
     return (
@@ -343,8 +347,8 @@ const Table = props => {
     );
   });
 
-  const fixedstyle = {
-    height: '55px',
+  // 固定表头样式
+  const fixedHeaderstyle = {
     position: 'absolute',
     zIndex: 10,
     top: 0,
@@ -355,7 +359,7 @@ const Table = props => {
   return (
     <div className={classnames('UI-Table', className)}>
       {/* 固定头部的表格 */}
-      {config.fixedHeader && <TableEl ref={fixedTableRef} type="fixed" style={fixedstyle} />}
+      {config.fixedHeader && <TableEl ref={fixedTableRef} type="fixed" style={fixedHeaderstyle} />}
       {/* 表格主体内容 */}
       <TableEl ref={mainTableRef} />
     </div>
