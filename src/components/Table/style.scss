@@ -1,0 +1,81 @@
+@import '../../static/style/css-public.color.scss';
+@import '../../static/style/css-public.size.scss';
+@import '../../static//style//css-public.scss';
+
+$tb-bg: #fff;
+$tb-bdcolor: $bdgrey;
+$tb-th-height: 55px;
+$tb-td-height: 55px;
+$tb-th-bgcolor: #fafafa;
+$sort-icon-color: rgb(191, 191, 191);
+
+@mixin cellstyle {
+  height: $tb-td-height;
+  border: 1px solid $tb-bdcolor;
+  text-align: center;
+}
+
+@mixin triangular-icon {
+  display: inline-block;
+  width: 20px;
+  height: 11px;
+  mask-image: url(../../static/icon/ui/icon-triangular.svg);
+  mask-repeat: no-repeat;
+  mask-size: cover;
+  mask-position: bottom;
+  background: $sort-icon-color;
+}
+
+.UI-Table {
+  background: $tb-bg;
+  position: relative;
+  .UI-Table__contain {
+    &.contain-hide {
+      opacity: 0;
+    }
+    &.contain-show {
+      opacity: 1;
+    }
+  }
+  table {
+    &.UI-Table__table {
+      width: 100%;
+
+      thead {
+        tr {
+          background: $tb-th-bgcolor;
+        }
+        th {
+          @include cellstyle;
+          font-weight: bold;
+          height: $tb-th-height;
+          cursor: pointer;
+        }
+
+        span {
+          display: inline-block;
+
+          vertical-align: middle;
+        }
+        .UI-Table__contain--sort {
+          width: 20px;
+        }
+        .UI-Table__contain--sort--up {
+          @include triangular-icon;
+          transform: rotate(-180deg);
+        }
+        .UI-Table__contain--sort--down {
+          @include triangular-icon;
+          background: $sort-icon-color;
+        }
+        .sort-active {
+          background: $primary;
+        }
+      }
+
+      td {
+        @include cellstyle;
+      }
+    }
+  }
+}

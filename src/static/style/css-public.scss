@@ -72,12 +72,22 @@
   align-items: center;
 }
 
+/* 禁用效果  */
+@mixin disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  &:hover {
+    outline: 1px solid $bdgrey;
+  }
+}
+
 /* input 默认样式 */
 @mixin defaultInput {
   width: 100%;
   height: $input-height-default;
   outline: 1px solid $border-color-default;
   transition: all 0.3 ease;
+  padding-left: 10px;
 
   &:hover {
     outline: 1px solid $primary;
@@ -87,6 +97,136 @@
     box-shadow: 0 0 1px 3px rgba($primary, 0.3);
   }
   &:disabled {
+    cursor: not-allowed;
     background-color: $bg-disabled;
   }
+}
+
+/** 自定义复选框样式  */
+@mixin custom_checkbox {
+  outline: 1px solid $bdgrey;
+  border-radius: 3px;
+  padding: 1px;
+
+  &:hover {
+    outline: 1px solid $primary;
+  }
+
+  label {
+    display: block;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+  }
+
+  .switch {
+    display: none;
+    &:checked + label {
+      background: $primary;
+      mask-image: url(../icon/ui/icon-check.svg);
+      mask-position: center;
+      mask-size: contain;
+      mask-repeat: no-repeat;
+    }
+    &:disabled + label {
+      cursor: not-allowed;
+    }
+  }
+}
+
+/** 自定义复选框Switch开关样式  */
+@mixin custom_switch($width: 50px, $height: 24px) {
+  label {
+    position: relative;
+    display: block;
+    width: $width;
+    background-color: $bdgrey;
+    cursor: pointer;
+    height: $height;
+    border-radius: $width;
+    transition: all 0.3s ease;
+    animation: toDisabled 1s;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translate($width * 0.05, -50%);
+      width: $height * 0.8;
+      height: $height * 0.8;
+      border-radius: 50%;
+      background-color: #fff;
+      transition: all 0.3s ease;
+      border: 1px solid $bdgrey;
+    }
+  }
+
+  .switch {
+    display: none;
+    /* 选中状态 */
+    &:checked + label::after {
+      transform: translate($width - $height * 0.8 - $width * 0.05 - 2px, -50%);
+    }
+    &:checked + label {
+      background-color: $primary;
+      animation: toChecked 1s;
+    }
+    /* 禁用状态 */
+    &:disabled + label {
+      opacity: 0.5;
+    }
+  }
+
+  /* 从未选中到选中到过渡效果 */
+  @keyframes toChecked {
+    from {
+      box-shadow: 0 0 1px 5px rgba($primary, 0.2);
+    }
+    to {
+      box-shadow: 0 0 1px 5px rgba($primary, 0);
+    }
+  }
+
+  /* 从选中到未选中的过渡效果 */
+  @keyframes toDisabled {
+    from {
+      box-shadow: 0 0 1px 5px rgba($bdgrey, 0.2);
+    }
+    to {
+      box-shadow: 0 0 1px 5px rgba($bdgrey, 0);
+    }
+  }
+}
+
+/* 按钮的默认样式  */
+@mixin defaultButton($width: 80px, $height: $input-height-default, $bgcolor: $primary) {
+  @include flex-column-center();
+  width: $width;
+  height: $height;
+  background: $bgcolor;
+  border: 1px solid $bgcolor;
+  color: #fff;
+  border-radius: $width * 0.06;
+  cursor: pointer;
+
+  &:hover {
+    background: lighten($bgcolor, 10%);
+    border: 1px solid lighten($bgcolor, 10%);
+    color: lighten(#fff, 10%);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    background: $bg-disabled;
+    border: 1px solid $bdgrey;
+    color: $bdgrey;
+  }
+}
+
+/* 文字一行超出显示省略号 */
+
+@mixin ellipsis() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

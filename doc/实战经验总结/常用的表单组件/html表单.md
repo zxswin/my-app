@@ -15,12 +15,8 @@
       <label>姓名:<input name="name1" type="text" value="小明" /></label>
       <button type="submit">表单提交按钮</button>
       <button type="reset">表单重置按钮</button>
-      <button class="btn-submit" type="button">
-        直接调用form.submit()提交表单
-      </button>
-      <button class="btn-reset" type="button">
-        直接调用form.reset()重置表单
-      </button>
+      <button class="btn-submit" type="button">直接调用form.submit()提交表单</button>
+      <button class="btn-reset" type="button">直接调用form.reset()重置表单</button>
     </form>
     <script>
       // 获取表单也可以通过普通的获取元素的方式获取
@@ -28,13 +24,13 @@
       // 可以通过表单控件的name获取某个表单元素
       console.log('获取表单中的某个表单元素', form1.elements.name1);
       // 给表单添加submit事件
-      form1.addEventListener('submit', (event) => {
+      form1.addEventListener('submit', event => {
         console.log('表单提交事件submit被触发了');
         // 阻止submit的默认提交事件
         event.preventDefault();
       });
       // 给表单添加reset事件
-      form1.addEventListener('reset', (event) => {
+      form1.addEventListener('reset', event => {
         console.log('表单重置事件reset被触发了');
         // 阻止submit的默认重置事件
         event.preventDefault();
@@ -43,12 +39,12 @@
       const btnSubmit = document.querySelector('.btn-submit');
       const btnReset = document.querySelector('.btn-reset');
 
-      btnSubmit.addEventListener('click', (event) => {
+      btnSubmit.addEventListener('click', event => {
         // 通过submit()提交表单则submit事件不会被触发
         form1.submit();
       });
 
-      btnReset.addEventListener('click', (event) => {
+      btnReset.addEventListener('click', event => {
         // 通过reset()方法重置表单reset事件会被触发
         form1.reset();
       });
@@ -69,30 +65,13 @@
   <style></style>
   <body>
     <form name="form1">
-      <label
-        >姓名: <input name="name1" type="text" value="小明" tabindex="3"
-      /></label>
-      <label
-        >年龄:<input
-          class="age"
-          name="age"
-          type="number"
-          value="10"
-          tabindex="2"
-          autofocus
-      /></label>
+      <label>姓名: <input name="name1" type="text" value="小明" tabindex="3" /></label>
+      <label>年龄:<input class="age" name="age" type="number" value="10" tabindex="2" autofocus /></label>
       <label
         >性别: <input name="sex" type="radio" value="man" checked disabled />男
         <input name="sex" type="radio" value="wom" disabled />女</label
       >
-      <label
-        >地址:<input
-          name="address"
-          type="text"
-          value="中国"
-          autofocus
-          tabindex="1"
-      /></label>
+      <label>地址:<input name="address" type="text" value="中国" autofocus tabindex="1" /></label>
       <button class="btn" type="button">设置焦点</button>
     </form>
     <script>
@@ -102,21 +81,21 @@
       const btn = document.querySelector('.btn');
       console.log('获取字段所属表单', inputName.form === form1); // true
       // 给设置字段获取焦点
-      btn.addEventListener('click', (event) => {
+      btn.addEventListener('click', event => {
         inputName.focus();
         // 设置控件为禁用状态
         inputAge.disabled = true;
       });
       // 监听获取焦点事件
-      inputName.addEventListener('focus', (event) => {
+      inputName.addEventListener('focus', event => {
         console.log('名称控件获取焦点了');
       });
       // 监听失去焦点事件
-      inputAge.addEventListener('blur', (event) => {
+      inputAge.addEventListener('blur', event => {
         console.log('年龄控件失去焦点了');
       });
       // 监听value改变事件
-      inputName.addEventListener('change', (event) => {
+      inputName.addEventListener('change', event => {
         // 只有当失去焦点并且值发生改变的时候才会触发
         console.log('名称控件输入值发生改变', event.currentTarget.value);
       });
@@ -138,13 +117,7 @@
   <body>
     <form name="form">
       <!-- 创建一个单行文本框size指定文本框的宽度是50个字符 maxlength最多显示6个字符 -->
-      <input
-        name="text"
-        type="text"
-        size="50"
-        maxlength="6"
-        value="单行文本框"
-      />
+      <input name="text" type="text" size="50" maxlength="6" value="单行文本框" />
       <!-- 创建一个多行文本框 rows指定高度 cols指定宽度 -->
       <textarea name="mltitext" rows="10" cols="20">多行文本框</textarea>
     </form>
@@ -152,20 +125,20 @@
       const form = document.forms.form;
       const inputText = form.elements.text;
       const inputTextArea = form.elements.mltitext;
-      inputText.addEventListener('change', (event) => {
+      inputText.addEventListener('change', event => {
         console.log('单行文本框输入的值', event.currentTarget.value);
       });
-      inputTextArea.addEventListener('change', (event) => {
+      inputTextArea.addEventListener('change', event => {
         console.log('多行行文本框输入的值', event.currentTarget.value);
       });
-      inputTextArea.addEventListener('focus', (event) => {
+      inputTextArea.addEventListener('focus', event => {
         // 选中文本框中的文本 会选中全部文本
         // event.currentTarget.select();
         // 设置选中部分文本
         event.currentTarget.setSelectionRange(0, 4);
       });
       // 文本框中文本的选中事件
-      inputTextArea.addEventListener('select', (event) => {
+      inputTextArea.addEventListener('select', event => {
         console.log('文本框中文本的选中事件');
         const value = event.currentTarget.value;
         const startIndex = event.currentTarget.selectionStart;
@@ -173,19 +146,15 @@
         console.log('选中的文本', value.substring(startIndex, endIndex));
       });
       // 输入过滤
-      inputTextArea.addEventListener('keypress', (event) => {
+      inputTextArea.addEventListener('keypress', event => {
         // 不能为数字
         // 不能用Crtl键
-        if (
-          /\d/.test(String.fromCharCode(event.charCode)) &&
-          event.charCode > 9 &&
-          !event.ctrlKey
-        ) {
+        if (/\d/.test(String.fromCharCode(event.charCode)) && event.charCode > 9 && !event.ctrlKey) {
           event.preventDefault();
         }
       });
       // 处理剪贴板事件
-      inputTextArea.addEventListener('paste', (event) => {
+      inputTextArea.addEventListener('paste', event => {
         // beforecopy 复制操作发生前触发
         // copy 复制操作发生时触发
         // beforecut 剪切操作发生前触发
@@ -283,7 +252,7 @@
       // 数值类型控件的递增递减
       const countInput = form.elements.count;
       const opCountBtn = document.querySelector('.op-count-btn');
-      opCountBtn.addEventListener('click', (event) => {
+      opCountBtn.addEventListener('click', event => {
         countInput.stepUp();
         countInput.stepDown();
         // 验证某个字段控件的有效性
@@ -296,7 +265,7 @@
       });
 
       // 验证表单中字段的有效性
-      form.addEventListener('submit', (event) => {
+      form.addEventListener('submit', event => {
         const checkValidity = form.checkValidity();
         console.log('验证表单中字段的有效性', checkValidity);
       });
@@ -337,17 +306,17 @@
       const addItemInsertBtn = document.querySelector('.add-item-insert');
       const removeItemBtn = document.querySelector('.remove-item');
       const moveItemBtn = document.querySelector('.move-item');
-      select.addEventListener('change', (event) => {
+      select.addEventListener('change', event => {
         // 选择框选项发生改变
         console.log('选择框选项发生改变');
       });
-      select.addEventListener('blur', (event) => {
+      select.addEventListener('blur', event => {
         // 选择框失去焦点的时候触发
         console.log('选择框失去焦点');
       });
 
       // 获取某个选项的文本或值
-      getValBtn.addEventListener('click', (event) => {
+      getValBtn.addEventListener('click', event => {
         // 获取第一项的文本和值
         const text = select.options[0].text;
         const val = select.options[0].value;
@@ -361,26 +330,26 @@
       });
 
       // 在末尾动态添加选项
-      addItemEndBtn.addEventListener('click', (event) => {
+      addItemEndBtn.addEventListener('click', event => {
         const newOption = new Option('杭州', 'hz');
         select.add(newOption, undefined);
       });
 
       // 在中间动态添加选项
-      addItemInsertBtn.addEventListener('click', (event) => {
+      addItemInsertBtn.addEventListener('click', event => {
         const newOption = new Option('天津', 'tj');
         const insetOption = select.options[1];
         select.add(newOption, insetOption);
       });
 
       // 移除选项
-      removeItemBtn.addEventListener('click', (event) => {
+      removeItemBtn.addEventListener('click', event => {
         select.remove(1);
         // select.options[1] = null;
       });
 
       // 移动和重排选项
-      moveItemBtn.addEventListener('click', (event) => {
+      moveItemBtn.addEventListener('click', event => {
         const optionRemove = select.options[2];
         console.log('要移动的选项索引', optionRemove.index);
         select.insertBefore(optionRemove, select.options[1]);
@@ -440,6 +409,32 @@
     }
     &:checked + label::before {
       background-color: green;
+    }
+  }
+}
+```
+
+```scss
+/** 自定义复选框样式  */
+@mixin custom_checkbox {
+  outline: 1px solid $bdgrey;
+  border-radius: 3px;
+  padding: 1px;
+  label {
+    display: block;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+  }
+
+  .switch {
+    display: none;
+    &:checked + label {
+      background: $primary;
+      mask-image: url(../icon/ui/icon-check.svg);
+      mask-position: center;
+      mask-size: contain;
+      mask-repeat: no-repeat;
     }
   }
 }

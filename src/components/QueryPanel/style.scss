@@ -1,0 +1,13 @@
+@import '../../static/style/css-public.color.scss';
+@import '../../static/style/css-public.scss';
+.UI-QueryPanel {
+  border: 1px solid $bdgrey;
+  padding: 20px 10px;
+  .UI-QueryPanel__input-contain {
+    @include flex-row-start;
+    flex-wrap: wrap;
+  }
+  .UI-QueryPanel__button-contain {
+    @include flex-row-center;
+  }
+}

@@ -1,0 +1,12 @@
+@import '../../static/style/css-public.scss';
+
+.UI-Checkbox {
+  @include custom_checkbox;
+  display: inline-block;
+  &.UI-Checkbox--disabled {
+    @include disabled;
+    &:hover {
+      outline: 1px solid $bdgrey;
+    }
+  }
+}

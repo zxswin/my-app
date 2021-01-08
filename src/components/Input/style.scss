@@ -1,0 +1,8 @@
+@import '../../static/style/css-public.scss';
+
+.UI-Input {
+  @include defaultInput;
+  &:disabled {
+    @include disabled;
+  }
+}

@@ -1,0 +1,5 @@
+@import '../../static//style/css-public.scss';
+
+.UI-Button {
+  @include defaultButton;
+}

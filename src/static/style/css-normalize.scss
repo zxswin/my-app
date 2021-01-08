@@ -201,6 +201,8 @@ pre,
 form,
 fieldset,
 table,
+thead,
+tbody,
 th,
 td {
   border: none;
@@ -224,6 +226,7 @@ html,
 body {
   height: 100%;
   width: 100%;
+  overflow-x: hidden;
 }
 address,
 caption,
@@ -258,7 +261,8 @@ input::-ms-clear {
 input::-ms-reveal {
   display: none;
 }
-input {
+input,
+button {
   -webkit-appearance: none;
   margin: 0;
   outline: none;
@@ -288,4 +292,8 @@ ul,
 ol,
 li {
   list-style-type: none;
+}
+
+table {
+  border-collapse: collapse;
 }

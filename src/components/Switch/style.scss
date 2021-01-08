@@ -1,0 +1,6 @@
+@import '../../static/style/css-public.scss';
+
+.UI-Switch {
+  @include custom_switch;
+  display: inline-block;
+}

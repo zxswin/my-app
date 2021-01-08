@@ -6,6 +6,8 @@ $options-contain-height: 150px;
 
 .UISelect {
   width: 100%;
+  cursor: pointer;
+  position: relative;
   .UISelect_input-contain {
     margin-bottom: 5px;
     position: relative;
@@ -13,7 +15,13 @@ $options-contain-height: 150px;
       @include defaultInput();
       padding-left: 10px;
       &:disabled {
+        cursor: pointer;
         background-color: $white;
+      }
+      &:hover {
+        & + .UISelect_input-contain--arrow {
+          background-color: rgba($primary, 0.8);
+        }
       }
     }
     .UISelect_input-contain--arrow {
@@ -30,9 +38,12 @@ $options-contain-height: 150px;
     }
   }
   .UISelect_options-contain {
+    position: absolute;
+    background: #fff;
+    width: 100%;
     outline: 1px solid $border-color-default;
     max-height: $options-contain-height;
-    overflow-y: auto;
+    z-index: 10;
     .UISelect_options-contain--empty {
       height: 100px;
       @include flex-row-center;
@@ -47,7 +58,7 @@ $options-contain-height: 150px;
       }
     }
     .UISelect_options-contain--li {
-      @include flex-row-between();
+      @include flex-row-between;
       padding: 0 10px;
       height: $input-height-default;
       cursor: pointer;
@@ -74,27 +85,49 @@ $options-contain-height: 150px;
     }
   }
 
+  &.UISelect--disabled {
+    cursor: not-allowed;
+    @include disabled;
+    .UISelect_input-contain {
+      input {
+        &:disabled {
+          cursor: not-allowed;
+          outline: 1px solid $border-color-default;
+        }
+        &:hover {
+          & + .UISelect_input-contain--arrow {
+            background-color: $bdgrey;
+          }
+        }
+      }
+    }
+  }
+
   /* 动画部分 */
-  .boss-text-enter {
+  .options-contain-enter {
     height: 0;
-    overflow: hidden;
+    overflow-y: hidden;
   }
-  .boss-text-enter-active {
+  .options-contain-enter-active {
     height: $options-contain-height;
-    transition: all 0.2s ease-in;
+    transition: all 0.1s ease-in;
+    overflow-y: auto;
   }
-  .boss-text-enter-done {
+  .options-contain-enter-done {
     height: $options-contain-height;
+    overflow-y: auto;
   }
-  .boss-text-exit {
+  .options-contain-exit {
     height: $options-contain-height;
-    overflow: hidden;
+    overflow-y: hidden;
   }
-  .boss-text-exit-active {
+  .options-contain-exit-active {
     height: 0;
-    transition: all 0.2s ease-in;
+    transition: all 0.1s ease-in;
+    overflow-y: hidden;
   }
-  .boss-text-exit-done {
+  .options-contain-exit-done {
     height: 0;
+    overflow-y: hidden;
   }
 }

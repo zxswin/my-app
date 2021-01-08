@@ -1,0 +1,16 @@
+@import '../../static/style/css-public.scss';
+
+.UI-FormItem {
+  @include flex-row-start;
+  align-items: center;
+  margin-bottom: 15px;
+  width: 300px;
+  .UI-FormItem_label {
+    width: 120px;
+    text-align: right;
+    padding-right: 10px;
+  }
+  .UI-FormItem_form-item {
+    flex: 1;
+  }
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <style></style>
+  <body>
+    <form name="form">
+      <select name="location">
+        <option value="sh">上海</option>
+        <option value="bj">北京</option>
+        <option value="gz">广州</option>
+        <option value="sz">深圳</option>
+      </select>
+      <button class="get-val-btn" type="button">获取选项</button>
+      <button class="add-item-end" type="button">在末尾动态添加选项</button>
+      <button class="add-item-insert" type="button">在中间动态添加选项</button>
+      <button class="remove-item" type="button">动态移除选项</button>
+      <button class="move-item" type="button">移动和重排选项</button>
+    </form>
+    <script>
+      const form = document.forms.form;
+      const select = document.form.location;
+      const getValBtn = document.querySelector('.get-val-btn');
+      const addItemEndBtn = document.querySelector('.add-item-end');
+      const addItemInsertBtn = document.querySelector('.add-item-insert');
+      const removeItemBtn = document.querySelector('.remove-item');
+      const moveItemBtn = document.querySelector('.move-item');
+      select.addEventListener('change', (event) => {
+        // 选择框选项发生改变
+        console.log('选择框选项发生改变');
+      });
+      select.addEventListener('blur', (event) => {
+        // 选择框失去焦点的时候触发
+        console.log('选择框失去焦点');
+      });
+
+      // 获取某个选项的文本或值
+      getValBtn.addEventListener('click', (event) => {
+        // 获取第一项的文本和值
+        const text = select.options[0].text;
+        const val = select.options[0].value;
+        console.dir(select);
+        console.log('获取某个选项的值', text, val);
+        // 获取选中项的文本和值
+        const selectedIndex = select.selectedIndex;
+        const selectOption = select.options[selectedIndex];
+        const isSelected = selectOption.selected; // 是否被选中了
+        console.log('获取当前选中项', selectOption, isSelected);
+      });
+
+      // 在末尾动态添加选项
+      addItemEndBtn.addEventListener('click', (event) => {
+        const newOption = new Option('杭州', 'hz');
+        select.add(newOption, undefined);
+      });
+
+      // 在中间动态添加选项
+      addItemInsertBtn.addEventListener('click', (event) => {
+        const newOption = new Option('天津', 'tj');
+        const insetOption = select.options[1];
+        select.add(newOption, insetOption);
+      });
+
+      // 移除选项
+      removeItemBtn.addEventListener('click', (event) => {
+        select.remove(1);
+        // select.options[1] = null;
+      });
+
+      // 移动和重排选项
+      moveItemBtn.addEventListener('click', (event) => {
+        const optionRemove = select.options[2];
+        console.log('要移动的选项索引', optionRemove.index);
+        select.insertBefore(optionRemove, select.options[1]);
+      });
+    </script>
+  </body>
+</html>

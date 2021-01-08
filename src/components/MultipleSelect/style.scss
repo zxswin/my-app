@@ -1,0 +1,141 @@
+@import '../../static/style/css-public.color.scss';
+@import '../../static/style/css-public.size.scss';
+@import '../../static/style/css-public.scss';
+
+$options-contain-height: 150px;
+
+.UI-MultipleSelect {
+  width: 100%;
+  cursor: pointer;
+  position: relative;
+  .UI-MultipleSelect__input--contain {
+    margin-bottom: 5px;
+    position: relative;
+    @include flex-row-between;
+    cursor: pointer;
+    input {
+      @include defaultInput;
+      padding-left: 10px;
+      &:disabled {
+        cursor: pointer;
+        background-color: $white;
+      }
+      &:hover {
+        & + .UI-MultipleSelect__input--contain--arrow {
+          background-color: rgba($primary, 0.8);
+        }
+      }
+    }
+    .UI-MultipleSelect__input--contain--arrow {
+      background-color: $bdgrey;
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      mask-image: url(../../static/icon/menu/icon-arrow.svg);
+      mask-position: center;
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      top: 6px;
+      right: 8px;
+    }
+  }
+  .UI-MultipleSelect__options--contain {
+    outline: 1px solid $border-color-default;
+    max-height: $options-contain-height;
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    background: #fff;
+    .UI-MultipleSelect__options--contain--empty {
+      height: 100px;
+      @include flex-row-center;
+      span {
+        width: 60px;
+        height: 60px;
+        mask-image: url(../../static/icon/ui/icon-empty.svg);
+        mask-size: contain;
+        mask-position: center;
+        mask-repeat: no-repeat;
+        background-color: $bdgrey;
+      }
+    }
+
+    .UI-MultipleSelect__options--contain--check {
+      @include custom_checkbox;
+    }
+    .UI-MultipleSelect__options--contain--lable {
+      padding-left: 15px;
+      height: 100%;
+      flex: 1;
+      @include flex-column-start;
+      justify-content: center;
+      &.active {
+        font-weight: 500;
+      }
+    }
+    li {
+      @include flex-row-start;
+      padding: 0 10px;
+      align-items: center;
+      height: $input-height-default;
+      cursor: pointer;
+      &:hover {
+        background-color: $bg-disabled;
+      }
+      &.active {
+        background-color: rgba($primary, 0.2);
+        font-weight: 500;
+        &:hover {
+          background-color: rgba($primary, 0.2);
+        }
+      }
+    }
+  }
+
+  /* 禁用效果 */
+  &.UI-MultipleSelect--disabled {
+    cursor: not-allowed;
+    @include disabled;
+    .UI-MultipleSelect__input--contain {
+      input {
+        &:disabled {
+          cursor: not-allowed;
+          outline: 1px solid $border-color-default;
+        }
+        &:hover {
+          & + .UI-MultipleSelect__input--contain--arrow {
+            background-color: $bdgrey;
+          }
+        }
+      }
+    }
+  }
+
+  /* 动画部分 */
+  .options-contain-enter {
+    height: 0;
+    overflow-y: hidden;
+  }
+  .options-contain-enter-active {
+    height: $options-contain-height;
+    transition: all 0.1s ease-in;
+    overflow-y: auto;
+  }
+  .options-contain-enter-done {
+    height: $options-contain-height;
+    overflow-y: auto;
+  }
+  .options-contain-exit {
+    height: $options-contain-height;
+    overflow-y: hidden;
+  }
+  .options-contain-exit-active {
+    height: 0;
+    transition: all 0.1s ease-in;
+    overflow-y: hidden;
+  }
+  .options-contain-exit-done {
+    height: 0;
+    overflow-y: hidden;
+  }
+}

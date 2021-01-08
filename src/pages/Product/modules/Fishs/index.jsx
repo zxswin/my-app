@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import Store from './store';
 import { getUserList, addUserItem } from '../../../Api';
-import HOC from '../../component/HOCcomponent/HOCcomponent';
-import Panel from 'components/Panel/Panel';
 import './style.scss';
 
 @observer
@@ -54,8 +52,6 @@ class Fishs extends Component {
           <button type="button" onClick={this.queryUserList}>
             查询用户
           </button>
-          <HOC />
-          <Panel />
         </div>
       </div>
     );
