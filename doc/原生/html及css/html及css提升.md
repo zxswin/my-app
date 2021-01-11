@@ -57,14 +57,7 @@ Live Server 插件可以在代码改变的时候自动刷新浏览器
 <!-- poster='houdunren.jpg' 视频封面-->
 <!-- preload='auto' 视频的加载方式 -->
 <!-- loop 设置视频循环播放模式  -->
-<video
-  src="houdunren.mp4"
-  controls
-  muted
-  autoplay
-  width="600"
-  height="300"
-></video>
+<video src="houdunren.mp4" controls muted autoplay width="600" height="300"></video>
 
 <!-- 如果有多个视频源可以使用source标签包裹  -->
 <video controls muted autoplay width="600" height="300">
@@ -406,12 +399,7 @@ div {
 /** 线性渐变的使用  */
 nav {
   height: 30px;
-  background: linear-gradient(
-    90deg,
-    red,
-    blue,
-    yellow
-  ); // 设置90度渐变 也可以设置to right 等方向值
+  background: linear-gradient(90deg, red, blue, yellow); // 设置90度渐变 也可以设置to right 等方向值
 }
 
 /** 径向渐变的使用  */
@@ -437,20 +425,8 @@ article {
 /** 重复渐变的使用  */
 article {
   height: 150px;
-  background: repeating-linear-gradient(
-    45deg,
-    blue,
-    25,
-    yellow 25,
-    25px,
-    red 5px
-  ); // 通过设置25的中间点产生来纯色的过度效果
-  background: repeating-radial-gradient(
-    100px 100px,
-    red,
-    yellow 25px,
-    red 60px
-  );
+  background: repeating-linear-gradient(45deg, blue, 25, yellow 25, 25px, red 5px); // 通过设置25的中间点产生来纯色的过度效果
+  background: repeating-radial-gradient(100px 100px, red, yellow 25px, red 60px);
 }
 ```
 
@@ -509,11 +485,7 @@ div {
   clip-path: circle(50% at 100% 100%); // at后面的参数是控制圆形的起始位置
   clip-path: ellipse(20% 30%); // 定义椭圆
   clip-path: polygon(0 0, 100% 100%, 0 100%); // 定义三角形
-  shape-outside: polygon(
-    0 0,
-    100% 100%,
-    0 100%
-  ); // 这样定义文字会围绕这三角形环绕
+  shape-outside: polygon(0 0, 100% 100%, 0 100%); // 这样定义文字会围绕这三角形环绕
 
   shape-outside: url(xj.png); // 使用有透明度的png图片来实现文本的环绕
 }
@@ -1347,8 +1319,7 @@ div {
   transition: all linear 2s 1s; // 所有属性 线性运动 持续2s 延迟1s执行
 
   /* 多属性的简写方式 */
-  transition: border-radius linear 2s 0s, background 2s 2s, width linear 2s 4s, height
-      linear 2s 4s;
+  transition: border-radius linear 2s 0s, background 2s 2s, width linear 2s 4s, height linear 2s 4s;
 }
 ```
 
@@ -1591,12 +1562,7 @@ li:nth-child(4) > i {
 ```scss
 li {
   animation-timing-function: ease-in; // 定义动画的运动轨迹
-  animation-timing-function: cubic-bezier(
-    0.17,
-    0.67,
-    0.83,
-    0.67
-  ); // 自定义动画的运动轨迹
+  animation-timing-function: cubic-bezier(0.17, 0.67, 0.83, 0.67); // 自定义动画的运动轨迹
 }
 ```
 
@@ -1642,7 +1608,7 @@ div:hover::before {
 ```scss
 div {
   animation-fill-mode: backwards; // 动画在起始帧开始
-  animation-fill-mode: forwards; // 动画在结束帧结束
+  animation-fill-mode: forwards; // 动画在结束帧结束last-of-type
   animation-fill-mode: both; // 动画在起始帧开始 动画在结束帧结束
 }
 ```

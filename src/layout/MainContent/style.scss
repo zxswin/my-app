@@ -17,6 +17,7 @@
     margin-bottom: $bottom-size-main;
     .MainContent-contain {
       flex: 1;
+      overflow: hidden;
     }
   }
 }

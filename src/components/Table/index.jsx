@@ -60,6 +60,13 @@ const Table = props => {
     fixedHeader: {
       height: '400px',
     },
+    // 固定表格的右侧
+    fixedRight: {
+      fixedLen: 2,
+      style: {
+        width: '500px',
+      },
+    },
     // 表头配置项
     columns: [
       {
@@ -83,6 +90,7 @@ const Table = props => {
         field: 'age', // 返回json数据中的name
         title: '年龄', // 表格表头显示文字
         sort: true, // 是否支持排序
+        width: '200px',
       },
       {
         field: 'class', // 返回json数据中的name
@@ -233,12 +241,20 @@ const Table = props => {
     [columnsData, tableData, copyData]
   );
 
-  // =========== 固定表格头部和相关固定列逻辑 ===========
-  const initFixHeaderStyle = config.fixedHeader ? config.fixedHeader : {};
-  const [fixHeaderStyle] = useState(initFixHeaderStyle);
-  const [showFixHeader, setShowFixHeader] = useState(false);
-  const mainTableRef = useRef(null);
-  const fixedTableRef = useRef(null);
+  // =========== 固定表格头部,相关固定列逻辑 ===========
+  const fixConfigHeaderStyle = config.fixedHeader ? config.fixedHeader : {}; // 固定头部样式配置
+  const fixConfigRightStyle = config.fixedRight ? config.fixedRight.style : {}; // 固定右侧样式配置
+  const fixConfigLeftStyle = config.fixedLeft ? config.fixedLeft.style : {}; // 固定左侧样式配置
+  const [showMainTable, setShowMainTable] = useState(false); // 控制表格是否显示
+  const [showFixHeader, setShowFixHeader] = useState(false); // 控制表格是否显示
+  const [showFixRight, setShowFixRight] = useState(false); // 控制表格是否显示
+  const [showFixLeft, setShowFixLeft] = useState(false); // 控制表格是否显示
+  const containRef = useRef(null); // 表格容器
+  const mainTableRef = useRef(null); // 主要展示表格容器
+  const fixedTopTableRef = useRef(null); // 固定头部表格容器
+  const fixedRightTableRef = useRef(null); // 固定右侧表格容器
+  const fixedLeftTableRef = useRef(null); // 固定左侧表格容器
+  const scrollSize = 7;
 
   // 生命周期函数
   useEffect(() => {
@@ -247,32 +263,128 @@ const Table = props => {
     config.getAllSelections = []; // 获取全选的数据
     config.isAllCheck = false; // 是否处于全选状态
 
+    // 固定表格头部和列的相关逻辑
+    // 设置表格宽度
+    const tableContain = window.getComputedStyle(containRef.current);
+    const tableContainWidth = tableContain.width;
+
+    const mainTable = mainTableRef.current;
+    const mainTableHeight = window.getComputedStyle(mainTable).height;
+    const mainTableWrap = mainTable.querySelector('.UI-Table__wrap');
+    const mainTableWrapHeight = window.getComputedStyle(mainTableWrap).height;
+
+    const tableWrapCollect = containRef.current.querySelectorAll('.UI-Table__wrap');
+
+    // 如果存在固定表头 固定右侧 固定左侧 的配置项目 则需要重新计算并设置相关高度及宽度
+    if (config.fixedHeader || config.fixedRight || config.fixedLeft) {
+      for (const tableWrap of tableWrapCollect) {
+        let width = tableContainWidth;
+
+        // 如果配置了固定左侧参数则tableWrap容器宽度为设置的宽度
+        if (fixConfigLeftStyle.width) {
+          width = fixConfigLeftStyle.width;
+        }
+
+        // 如果配置了固定右侧参数则tableWrap容器宽度为设置的宽度
+        if (fixConfigRightStyle.width) {
+          width = fixConfigRightStyle.width;
+        }
+
+        // 如果是固定顶部需重新计算容器宽度受滚动条的影响
+        if (config.fixedHeader) {
+          // 如果内容高度小于容器高度则从新设置容器高度
+          if (mainTableHeight > mainTableWrapHeight) {
+            width = parseInt(width) - 2 + 'px';
+            mainTable.style.height = parseInt(mainTableWrapHeight) + 2 + 'px';
+          } else {
+            width = parseInt(width) - 2 - scrollSize + 'px';
+          }
+        }
+
+        tableWrap.style.width = width;
+      }
+    }
+
+    setShowMainTable(true);
+
     // 配置表格宽度信息
     // 如果是设置了固定表头
-    if (config.fixedHeader) {
-      const mainTableThCollect = mainTableRef.current.querySelectorAll('th');
-      const fixedTableThCollect = fixedTableRef.current.querySelectorAll('th');
+    if (config.fixedHeader || config.fixedRight || config.fixedLeft) {
+      const mainTable = mainTableRef.current;
+      const fixedTopTable = fixedTopTableRef.current;
 
-      mainTableThCollect.forEach((el, index) => {
-        const computeStyle = window.getComputedStyle(el);
-        fixedTableRef.current.style.height = computeStyle.height;
-        config.columns[index].width = computeStyle.width;
-        config.columns[index].height = computeStyle.height;
-        fixedTableThCollect[index].style.width = computeStyle.width;
-        fixedTableThCollect[index].style.height = computeStyle.height;
-      });
-      setShowFixHeader(true);
+      // 展示固定头部表格
+      if (config.fixedHeader) {
+        // 设置固定表格的高度
+        const thEl = mainTable.querySelector('.UI-Table__table th');
+        const height = window.getComputedStyle(thEl).height;
+        fixedTopTable.style.height = parseInt(height) + 2 + 'px';
+
+        setShowFixHeader(true);
+      }
+
+      // 展示固定左侧表格
+      if (config.fixedLeft) {
+        // 设置固定表格的宽度 及 高度
+        setFixedTableSize('left', fixedLeftTableRef, config.fixedLeft);
+      }
+
+      // 展示固定右侧表格
+      if (config.fixedRight) {
+        // 设置固定表格的宽度 及 高度
+        setFixedTableSize('right', fixedRightTableRef, config.fixedRight);
+      }
     }
-  }, [config]);
+  }, [config, fixConfigRightStyle.width, fixConfigLeftStyle.width]);
 
   useEffect(() => {
     console.log('更新都会执行');
   });
 
+  /**
+   * 设置左侧或右侧固定表格的相关初始化尺寸
+   * @param type 固定表格的类型 left | right
+   * @param tableRef 表格容器的ref
+   * @param config 固定表格的配置
+   */
+  function setFixedTableSize(type, tableRef, config) {
+    const mainTable = mainTableRef.current;
+    const thElCollect = mainTable.querySelectorAll('.UI-Table__table th');
+    const thLen = thElCollect.length;
+    const fixedTable = tableRef.current;
+    const fixedLen = config.fixedLen;
+    const fixedTbWrap = fixedTable.querySelector('.UI-Table__wrap');
+    const fixeTable = fixedTbWrap.querySelector('.UI-Table__table');
+    const fixeTableHeight = window.getComputedStyle(fixeTable).height;
+    let fixedWidth = 0;
+
+    if (type === 'left') {
+      for (let i = 0; i < fixedLen; i++) {
+        fixedWidth += parseInt(window.getComputedStyle(thElCollect[i]).width);
+      }
+    } else if (type === 'right') {
+      for (let i = 1; i <= fixedLen; i++) {
+        fixedWidth += parseInt(window.getComputedStyle(thElCollect[thLen - i]).width);
+      }
+    }
+
+    fixedTable.style.width = fixedWidth + 2 + 'px';
+
+    fixedTable.style.height = parseInt(window.getComputedStyle(mainTable).height) - 1 - scrollSize + 'px';
+
+    fixedTbWrap.style.height = fixeTableHeight;
+
+    if (type === 'left') {
+      setShowFixLeft(true);
+    } else if (type === 'right') {
+      setShowFixRight(true);
+    }
+  }
+
   // 渲染表头单元格
   const ColumnEl = props => {
     const { column } = props;
-    const widthStyle = column.width ? { width: column.width, height: column.height } : {};
+    const widthStyle = column.width ? { width: column.width } : {};
     return (
       <th onClick={() => changeFieldSore(column)} style={widthStyle}>
         {column.checkbox ? (
@@ -308,42 +420,45 @@ const Table = props => {
   };
 
   const TableEl = React.forwardRef((props, ref) => {
-    const { style = {}, type } = props;
-    const containStyle = Object.assign({}, fixHeaderStyle, style);
+    const { type } = props;
+    let style = {};
 
-    let className = classnames('UI-Table__contain');
-
-    if (type === 'fixed') {
-      className = classnames('UI-Table__contain', {
-        'contain-hide': !showFixHeader,
-        'contain-show': showFixHeader,
-      });
-      containStyle.height = columnsData[0].height;
+    if (type === 'fixedRight') {
+      // 固定右侧表格的表格样式
+      style = {
+        right: 0,
+        top: 0,
+        position: 'absolute',
+      };
+    } else if (type === 'fixedLeft') {
+      // 固定右侧表格的表格样式
+      style = {
+        left: 0,
+        top: 0,
+        position: 'absolute',
+      };
     }
-
     return (
-      <div className={className} ref={ref} style={containStyle}>
-        <table className="UI-Table__table">
-          {/* 表头 */}
-          <thead>
-            <tr>
-              {columnsData.map(column => (
-                <ColumnEl key={`${column.field}${column.title}`} column={column} />
+      <table className="UI-Table__table" style={style}>
+        {/* 表头 */}
+        <thead>
+          <tr>
+            {columnsData.map(column => (
+              <ColumnEl key={`${column.field}${column.title}`} column={column} />
+            ))}
+          </tr>
+        </thead>
+        {/* 表主体 */}
+        <tbody>
+          {tableData.map((row, index) => (
+            <tr key={`${index}`}>
+              {columns.map(column => (
+                <CellEl key={`${column.field}${column.title}`} column={column} row={row} index={index} />
               ))}
             </tr>
-          </thead>
-          {/* 表主体 */}
-          <tbody>
-            {tableData.map((row, index) => (
-              <tr key={`${index}`}>
-                {columns.map(column => (
-                  <CellEl key={`${column.field}${column.title}`} column={column} row={row} index={index} />
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     );
   });
 
@@ -356,12 +471,99 @@ const Table = props => {
     overflow: 'hidden',
   };
 
+  // 固定左侧样式
+  const fixedLeftStyle = {
+    position: 'absolute',
+    zIndex: 10,
+    top: 0,
+    left: 0,
+    overflow: 'hidden',
+  };
+
+  // 固定右侧样式
+  const fixedRightstyle = {
+    position: 'absolute',
+    zIndex: 10,
+    top: 0,
+    right: 0,
+    overflow: 'hidden',
+  };
+
+  // 固定表头表格样式
+  const fixedTbStyle = Object.assign({}, fixedHeaderstyle, fixConfigHeaderStyle);
+
+  // 固定左侧表格样式
+  const leftTbStyle = Object.assign({}, fixedLeftStyle);
+
+  // 固定右侧表格样式
+  const rightTbStyle = Object.assign({}, fixedRightstyle);
+
+  // 表格主体样式
+  const mainTbStyle = Object.assign({}, fixConfigHeaderStyle, { overflow: 'auto' });
+
   return (
-    <div className={classnames('UI-Table', className)}>
-      {/* 固定头部的表格 */}
-      {config.fixedHeader && <TableEl ref={fixedTableRef} type="fixed" style={fixedHeaderstyle} />}
+    <div ref={containRef} className={classnames('UI-Table', className)}>
       {/* 表格主体内容 */}
-      <TableEl ref={mainTableRef} />
+      <div
+        className={classnames('UI-Table__contain', {
+          'contain-hide': !showMainTable,
+          'contain-show': showMainTable,
+        })}
+        style={mainTbStyle}
+        ref={mainTableRef}
+      >
+        <div className="UI-Table__wrap">
+          <TableEl type="main" />
+        </div>
+      </div>
+
+      {/* 固定左侧的表格 */}
+      {config.fixedLeft && (
+        <div
+          className={classnames('UI-Table__contain', {
+            'contain-hide': !showFixLeft,
+            'contain-show': showFixLeft,
+          })}
+          ref={fixedLeftTableRef}
+          style={leftTbStyle}
+        >
+          <div className="UI-Table__wrap" style={leftTbStyle}>
+            <TableEl type="fixedLeft" />
+          </div>
+        </div>
+      )}
+
+      {/* 固定右侧的表格 */}
+      {config.fixedRight && (
+        <div
+          className={classnames('UI-Table__contain', {
+            'contain-hide': !showFixRight,
+            'contain-show': showFixRight,
+          })}
+          ref={fixedRightTableRef}
+          style={rightTbStyle}
+        >
+          <div className="UI-Table__wrap" style={rightTbStyle}>
+            <TableEl type="fixedRight" />
+          </div>
+        </div>
+      )}
+
+      {/* 固定头部的表格 */}
+      {config.fixedHeader && (
+        <div
+          className={classnames('UI-Table__contain', {
+            'contain-hide': !showFixHeader,
+            'contain-show': showFixHeader,
+          })}
+          style={fixedTbStyle}
+          ref={fixedTopTableRef}
+        >
+          <div className="UI-Table__wrap">
+            <TableEl type="fixedTop" />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

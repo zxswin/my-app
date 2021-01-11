@@ -11,7 +11,7 @@ $sort-icon-color: rgb(191, 191, 191);
 
 @mixin cellstyle {
   height: $tb-td-height;
-  border: 1px solid $tb-bdcolor;
+  border-right: 1px solid $tb-bdcolor;
   text-align: center;
 }
 
@@ -27,9 +27,16 @@ $sort-icon-color: rgb(191, 191, 191);
 }
 
 .UI-Table {
-  background: $tb-bg;
   position: relative;
+  border: 1px solid $tb-bdcolor;
   .UI-Table__contain {
+    border-right: none;
+    background: $tb-bg;
+    overflow: auto;
+    .UI-Table__wrap {
+      position: relative;
+      min-width: 800px;
+    }
     &.contain-hide {
       opacity: 0;
     }
@@ -44,6 +51,7 @@ $sort-icon-color: rgb(191, 191, 191);
       thead {
         tr {
           background: $tb-th-bgcolor;
+          border-bottom: 1px solid $tb-bdcolor;
         }
         th {
           @include cellstyle;
@@ -70,6 +78,20 @@ $sort-icon-color: rgb(191, 191, 191);
         }
         .sort-active {
           background: $primary;
+        }
+      }
+
+      tbody tr {
+        border-bottom: 1px solid $tb-bdcolor;
+        &:last-of-type {
+          border: none;
+        }
+      }
+
+      tr {
+        td:last-of-type,
+        th:last-of-type {
+          border-right: none;
         }
       }
 

@@ -14,14 +14,14 @@ const tableData1 = [
   { name: '小明2', age: 10, class: '一班', sore: '99分', operation: '1' },
   { name: '小明3', age: 10, class: '一班', sore: '99分', operation: '1' },
   { name: '小明4', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明5', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明6', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明7', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明8', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明9', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明10', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明11', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明12', age: 10, class: '一班', sore: '99分', operation: '1' },
+  // { name: '小明5', age: 10, class: '一班', sore: '99分', operation: '1' },
+  // { name: '小明6', age: 10, class: '一班', sore: '99分', operation: '1' },
+  // { name: '小明7', age: 10, class: '一班', sore: '99分', operation: '1' },
+  // { name: '小明8', age: 10, class: '一班', sore: '99分', operation: '1' },
+  // { name: '小明9', age: 10, class: '一班', sore: '99分', operation: '1' },
+  // { name: '小明10', age: 10, class: '一班', sore: '99分', operation: '1' },
+  // { name: '小明11', age: 10, class: '一班', sore: '99分', operation: '1' },
+  // { name: '小明12', age: 10, class: '一班', sore: '99分', operation: '1' },
 ];
 
 const modifyClick = (row, index, value) => {
@@ -59,9 +59,23 @@ const tableConfig = {
   // 加载失败的时候执行
   onLoadError: () => {},
   // 固定表格头部
-  fixedHeader: {
-    height: '400px',
-    overflowY: 'auto',
+  // fixedHeader: {
+  //   height: '200px',
+  // },
+  // 固定表格的右侧
+  fixedRight: {
+    fixedLen: 1,
+    style: {
+      width: '1800px',
+    },
+  },
+
+  // 固定表格的左侧
+  fixedLeft: {
+    fixedLen: 1,
+    style: {
+      width: '1800px',
+    },
   },
   // 表头配置项
   columns: [
@@ -86,6 +100,7 @@ const tableConfig = {
       field: 'age', // 返回json数据中的name
       title: '年龄', // 表格表头显示文字
       sort: true, // 是否支持排序
+      width: '200px',
     },
     {
       field: 'class', // 返回json数据中的name
@@ -181,7 +196,7 @@ class Vegetables extends Component {
           <QueryPanel onQueryClick={this.onQueryClick} />
         </div> */}
         <div className="Vegetables__animation">
-          <div>
+          <div className="btn-box">
             <Button
               text="选中数据"
               onClick={() => {
