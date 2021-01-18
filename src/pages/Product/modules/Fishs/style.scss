@@ -1,52 +1,11 @@
-.Fishs {
-  display: flex;
-  flex-direction: column;
-
-  .fishs_content-input {
-    border: 1px solid #ccc;
-    margin-top: 30px;
-    height: 300px;
+@import '../../../../static/style/css-public.color.scss';
+@import '../../../../static/style/css-public.size.scss';
+@import '../../../../static/style/css-public.scss';
+$mb-size: $bottom-size-query; // 查询模块下方间距
+.Product-Fishs {
+  .Product-Fishs__query-panel {
+    margin-bottom: $mb-size;
   }
-
-  .checked_box {
-    label {
-      position: relative;
-      display: block;
-      width: 100px;
-      padding: 5px;
-      background-color: #eee;
-      cursor: pointer;
-
-      &::before {
-        content: '';
-        display: block;
-        border-radius: 24px;
-        height: 22px;
-        background-color: white;
-        transition: all 0.3s ease;
-      }
-      &::after {
-        content: '';
-        position: absolute;
-
-        transform: translate(5px, -100%);
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        background-color: white;
-        transition: all 0.3s ease;
-        border: 1px solid #333;
-      }
-    }
-
-    .switch {
-      display: none;
-      &:checked + label::after {
-        transform: translate(75px, -100%);
-      }
-      &:checked + label::before {
-        background-color: green;
-      }
-    }
+  .Product-Fishs__query-table {
   }
 }

@@ -1,0 +1,147 @@
+@import '../../static/style/css-public.color.scss';
+@import '../../static/style/css-public.size.scss';
+@import '../../static/style/css-public.scss';
+
+$height: 32px;
+$width: 32px;
+$bd-color: $border-color-default;
+$icon-grey-color: $icon-grey;
+$margin-r: 10px;
+$margin-b: 10px;
+
+@mixin inline-block {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    &:hover {
+      border: 1px solid $bd-color;
+    }
+  }
+}
+
+@mixin active {
+  border: 1px solid $primary;
+  color: $primary;
+}
+
+@mixin cellbox {
+  width: $width;
+  height: $height;
+  border: 1px solid $bd-color;
+  text-align: center;
+  margin-right: $margin-r;
+  line-height: $height;
+  cursor: pointer;
+  transition: all 0.3s ease-in;
+
+  &:hover {
+    @include active;
+  }
+}
+
+@mixin operation-icon {
+  @include inline-block;
+  background-color: $icon-grey-color;
+  width: 16px;
+  height: 16px;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-image: url(../../static/icon/menu/icon-arrow.svg);
+}
+
+.UI-Pagination {
+  display: inline-block;
+  margin-top: 20px;
+
+  .UI-Pagination__previous {
+    @include inline-block;
+    @include cellbox;
+    line-height: 30px;
+    .UI-Pagination__previous--icon-pre {
+      @include inline-block;
+      @include operation-icon;
+      transform: rotate(90deg);
+    }
+  }
+  .UI-Pagination__pages {
+    @include inline-block;
+    li {
+      @include inline-block;
+      @include cellbox;
+      &.active {
+        @include active();
+        font-weight: 500;
+      }
+    }
+  }
+  .UI-Pagination__next {
+    @include inline-block;
+    @include cellbox;
+    line-height: 30px;
+    .UI-Pagination__previous--icon-next {
+      @include inline-block;
+      @include operation-icon;
+      transform: rotate(-90deg);
+    }
+  }
+  .UI-Pagination__page-size {
+    @include inline-block;
+    position: relative;
+
+    .UI-Pagination__page-size--current {
+      @include cellbox;
+      line-height: $height;
+      width: 80px;
+      &:focus {
+        @include active;
+      }
+    }
+    .UI-Pagination__page-size--options {
+      display: block;
+      position: absolute;
+      top: 40px;
+      left: -20px;
+      opacity: 0;
+      z-index: 1000;
+
+      box-shadow: 0 0 10px 4px $bd-color;
+      background: $white;
+      width: 120px;
+      border-radius: 4px;
+
+      li {
+        display: block;
+        height: $height;
+        line-height: $height;
+        text-align: center;
+        cursor: pointer;
+        &.active {
+          background: rgba($primary, 0.2);
+          font-weight: 600;
+        }
+        &:hover {
+          background: $bg-grey;
+        }
+      }
+    }
+  }
+  .UI-Pagination__jump-pages {
+    display: inline-block;
+    span,
+    input {
+      @include inline-block;
+    }
+    input {
+      @include defaultInput;
+      width: 50px;
+      padding: 0;
+      margin: 0 $margin-r;
+      text-align: center;
+      line-height: $height;
+    }
+  }
+}

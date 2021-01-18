@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Select from '../Select';
 import MultipleSelect from '../MultipleSelect';
 import Input from '../Input';
@@ -7,6 +7,7 @@ import Switch from '../Switch';
 import Button from '../Button';
 import FormItem from '../FormItem';
 import './style.scss';
+import { isBoolean } from 'lodash';
 
 /**
  * 根据类型输出不同的控件
@@ -115,30 +116,39 @@ const QueryPanel = props => {
   const { configList = defaultConfigList, onQueryClick = () => {} } = props;
 
   // 配置列表
-  const [configmation] = useState(configList);
+  const [configmation, setConfigmation] = useState(configList);
 
   // 查询结果集
   const [queryData, setQueryData] = useState({});
 
-  configmation.forEach(config => {
-    const field = config.field;
-    const query = { ...queryData };
-    const type = config.type;
+  const initConfigMation = useCallback(() => {
+    const configmationData = [...configList];
+    configmationData.forEach(config => {
+      const field = config.field;
+      const query = { ...queryData };
+      const type = config.type;
 
-    const onChange = value => {
-      console.log('获取到输入控件的值', value);
-      if (type === 'checkbox' || type === 'switch' || type === 'radio') {
-        config.props.checked = value;
-      } else {
-        config.props.value = value;
-      }
+      const onChange = value => {
+        value = typeof value === 'string' ? value.trim() : value;
+        if (type === 'checkbox' || type === 'switch' || type === 'radio') {
+          config.props.checked = value;
+        } else {
+          config.props.value = value;
+        }
 
-      query[field] = value;
-      setQueryData(query);
-      config.onChange && config.onChange(value);
-    };
-    config.props.onChange = onChange;
-  });
+        query[field] = value;
+        setQueryData(query);
+        config.onChange && config.onChange(value);
+      };
+      config.props.onChange = onChange;
+    });
+
+    setConfigmation(configmationData);
+  }, [configList, queryData]);
+
+  useEffect(() => {
+    initConfigMation();
+  }, [initConfigMation]);
 
   return (
     <div className="UI-QueryPanel">

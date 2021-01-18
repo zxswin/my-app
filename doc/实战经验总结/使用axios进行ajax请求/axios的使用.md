@@ -278,8 +278,7 @@ const config = {
 ```ts
 axios.defaults.baseURL = 'https://api.example.com';
 axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-axios.defaults.headers.post['Content-Type'] =
-  'application/x-www-form-urlencoded';
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 ```
 
 - 自定义实例默认值
@@ -501,3 +500,9 @@ axios.post('http://something.com/', querystring.stringify({ foo: 'bar' }));
 ```
 
 ## axios-retry 一个可以设置请求重试的插件
+
+## 关于文件上传
+
+```ts
+// 文件上传也是使用post请求
+```

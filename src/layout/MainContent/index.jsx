@@ -1,5 +1,7 @@
 import { Suspense } from 'react';
+import { observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
+import LoginStore from '../../store/login';
 import NoFound from '../../pages/NoFound';
 import Login from '../../pages/Login';
 import Welcome from '../../pages/Welcome';
@@ -7,14 +9,23 @@ import RouterNavLink from './RouterNavLink';
 import RouterSubLink from './RouterSubLink';
 import TopBar from '../TopBar';
 import FooterBar from '../FooterBar';
+import Validator from 'validatorjs';
+
 import './style.scss';
 
+const loginStore = LoginStore.getInstance();
+
 const MainContent = props => {
+  console.log('MainContent999', props);
   const { location, config, homeRouterConfig } = props;
   const { pathname } = location;
-  const isLogin = true; // 是否为登录状态
+  const { login: loginData } = loginStore;
 
-  console.log('pathname', pathname);
+  Validator.useLang('zh'); // 设置校验插件
+
+  const isLogin = sessionStorage.getItem('isLogin'); // 是否为登录状态
+
+  console.log('pathname', pathname, 'isLogin888', isLogin);
 
   // 获取当前路由的路由配置
   const targetRouterConfig = config.find(router => router.path === pathname);
@@ -39,7 +50,7 @@ const MainContent = props => {
             <RouterNavLink location={location} routerConfig={homeRouterConfig} />
             <div className="MainContent-contain">
               {/* 主体内容顶部三级菜单 */}
-              <RouterSubLink location={location} routerConfig={homeRouterConfig} />
+              {/* <RouterSubLink location={location} routerConfig={homeRouterConfig} /> */}
               {/* 访问根目录如果是已经登录状态则直接跳转到主页 */}
               {pathname === '/' ? <Route path="/" component={Welcome} /> : <Route path={pathname} component={component} />}
             </div>
@@ -55,4 +66,4 @@ const MainContent = props => {
   }
 };
 
-export default MainContent;
+export default observer(MainContent);

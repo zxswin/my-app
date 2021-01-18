@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import Select from '../../../../components/Select';
 import MultipleSelect from '../../../../components/MultipleSelect';
 import Input from '../../../../components/Input';
@@ -7,21 +8,63 @@ import Switch from '../../../../components/Switch';
 import Button from '../../../../components/Button';
 import QueryPanel from '../../../../components/QueryPanel';
 import Table from '../../../../components/Table';
+import Modal from '../../../../components/Modal';
+import DTPicker from '../../../../components/DTPicker';
 import './style.scss';
 
-const tableData1 = [
-  { name: '小明100', age: 10, class: '一班', sore: '99分', operation: '1' },
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+
+import Validator from 'validatorjs';
+
+let validator = new Validator(
+  {
+    name: '小小',
+    email: '123@123com',
+  },
+  {
+    name: 'size:3',
+    email: 'required|email',
+  }
+);
+
+// 自定义属性名
+validator.setAttributeNames({ name: '姓名', email: '邮箱' });
+
+// 校验失败
+validator.fails(() => {
+  console.log('校验失败!', validator.errors.all());
+});
+
+// 校验成功
+validator.passes(() => {
+  console.log('校验成功!');
+});
+
+// 错误提示信息
+const first = validator.errors.first(); // 获取第一条错误信息 如果没有信息则返回false
+const get = validator.errors.get('email'); // 获取所有校验失败信息的数组
+
+let inputProps = {
+  placeholder: 'N/A',
+  disabled: true,
+  onMouseLeave: () => alert('You went to the input but it was disabled'),
+};
+
+var valid = function (current) {
+  return current.day() !== 0 && current.day() !== 6;
+};
+
+const data = [
+  { name: '小明1小明1小明1小明1小明1小明1小明1', age: 10, class: '一班', sore: '99分', operation: '1' },
   { name: '小明2', age: 10, class: '一班', sore: '99分', operation: '1' },
   { name: '小明3', age: 10, class: '一班', sore: '99分', operation: '1' },
   { name: '小明4', age: 10, class: '一班', sore: '99分', operation: '1' },
-  // { name: '小明5', age: 10, class: '一班', sore: '99分', operation: '1' },
-  // { name: '小明6', age: 10, class: '一班', sore: '99分', operation: '1' },
-  // { name: '小明7', age: 10, class: '一班', sore: '99分', operation: '1' },
-  // { name: '小明8', age: 10, class: '一班', sore: '99分', operation: '1' },
-  // { name: '小明9', age: 10, class: '一班', sore: '99分', operation: '1' },
-  // { name: '小明10', age: 10, class: '一班', sore: '99分', operation: '1' },
-  // { name: '小明11', age: 10, class: '一班', sore: '99分', operation: '1' },
-  // { name: '小明12', age: 10, class: '一班', sore: '99分', operation: '1' },
+  { name: '小明5', age: 10, class: '一班', sore: '99分', operation: '1' },
+  { name: '小明6', age: 10, class: '一班', sore: '99分', operation: '1' },
+  { name: '小明7', age: 10, class: '一班', sore: '99分', operation: '1' },
+  { name: '小明8', age: 10, class: '一班', sore: '99分', operation: '1' },
+  { name: '小明9', age: 10, class: '一班', sore: '99分', operation: '1' },
+  { name: '小明10', age: 10, class: '一班', sore: '99分', operation: '1' },
 ];
 
 const modifyClick = (row, index, value) => {
@@ -33,50 +76,32 @@ const deleteClick = (row, index, value) => {
 };
 
 const tableConfig = {
-  // 获取表格数据的url
-  url: '',
-  cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
-  striped: true, //表格显示条纹，默认为false
-  pagination: true, // 在表格底部显示分页组件，默认false
-  pageList: [10, 20], // 设置页面可以显示的数据条数
-  pageSize: 10, // 页面数据条数
-  pageNumber: 1, // 首页页码
-  sidePagination: 'server', // 设置为服务器端分页
-  queryParams: function (params) {
-    // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
-    return {
-      pageSize: params.limit, // 每页要显示的数据条数
-      offset: params.offset, // 每页显示数据的开始行号
-      sort: params.sort, // 要排序的字段
-      sortOrder: params.order, // 排序规则
-      dataId: 0, // 额外添加的参数
-    };
-  },
-  sortName: 'id', // 要排序的字段
-  sortOrder: 'desc', // 排序规则
-  // 加载成功的时候执行
-  onLoadSuccess: () => {},
-  // 加载失败的时候执行
-  onLoadError: () => {},
   // 固定表格头部
   // fixedHeader: {
-  //   height: '200px',
+  //   height: '400px',
   // },
   // 固定表格的右侧
-  fixedRight: {
-    fixedLen: 1,
-    style: {
-      width: '1800px',
-    },
-  },
+  // fixedRight: {
+  //   fixedLen: 1,
+  //   style: {
+  //     width: '1800px',
+  //   },
+  // },
 
   // 固定表格的左侧
-  fixedLeft: {
-    fixedLen: 1,
-    style: {
-      width: '1800px',
-    },
-  },
+  // fixedLeft: {
+  //   fixedLen: 1,
+  //   style: {
+  //     width: '1800px',
+  //   },
+  // },
+
+  // 是否展示分页器 是否展示分页器默认为true
+  showPagination: true,
+
+  // 是否进行本地分页 默认为false 进行服务端分页
+  // localPaging: true,
+
   // 表头配置项
   columns: [
     {
@@ -95,6 +120,15 @@ const tableConfig = {
       align: 'center', // 左右居中
       valign: 'middle', // 上下居中
       sort: true, // 是否支持排序
+      width: '200px',
+      // 自定义标题
+      customTitle: column => {
+        return (
+          <div>
+            <span>{column.title}188</span>
+          </div>
+        );
+      },
     },
     {
       field: 'age', // 返回json数据中的name
@@ -106,6 +140,7 @@ const tableConfig = {
       field: 'class', // 返回json数据中的name
       title: '班级', // 表格表头显示文字
       sort: true, // 是否支持排序
+      width: '200px',
     },
     {
       field: 'sore', // 返回json数据中的name
@@ -124,8 +159,6 @@ const tableConfig = {
       },
     },
   ],
-  // 表格数据
-  data: tableData1,
 };
 
 class Vegetables extends Component {
@@ -146,7 +179,11 @@ class Vegetables extends Component {
       ],
       radioChecked: false,
       inputValue: '',
+      tableData: data,
+      modalShow: false,
     };
+
+    // console.log('校验失败!', validator.errors.all());
   }
 
   // 改变选项事件
@@ -181,12 +218,72 @@ class Vegetables extends Component {
     });
   };
 
+  // 表格组件
+  // 改变pageSize触发的事件
+  pageSizeChange = pageSize => {
+    console.log('改变pageSize触发的事件', pageSize);
+    const tableData = [];
+    for (let i = 1; i <= pageSize; i++) {
+      tableData.push({
+        name: `小明${i}`,
+        age: 10,
+        class: '一班',
+        sore: '99分',
+        operation: '1',
+      });
+    }
+
+    this.setState({
+      tableData: tableData,
+    });
+  };
+
+  // 改变当前激活的页面
+  currentPageChange = num => {
+    console.log('改变当前激活的页面', num);
+    const tableData = [];
+    for (let i = 1; i <= this.state.tableData.length; i++) {
+      tableData.push({
+        name: `小明${num}`,
+        age: 10,
+        class: '一班',
+        sore: '99分',
+        operation: '1',
+      });
+    }
+
+    this.setState({
+      tableData: tableData,
+    });
+  };
+
+  // 点击展示弹出框1
+  showModal = () => {
+    const props = {
+      type: 'success',
+
+      onConfirm: flag => {
+        console.log('点击了确认按钮1', flag);
+        return true;
+        // Modal.showModal({
+        //   title: '标题66', // 标题
+        //   children: <div className="vm-box">666</div>, // 弹框内容
+        // });
+      },
+    };
+    Modal.showModal(props);
+  };
+  showModal2 = () => {
+    Modal.showModal();
+  };
+
   render() {
-    const { selectList, radioChecked, inputValue } = this.state;
+    const { selectList, radioChecked, inputValue, tableData, modalShow } = this.state;
     return (
-      <div className="Vegetables">
-        <div>蔬菜类中心</div>
-        {/* <Input defaultValue={inputValue} onChange={this.onInputChange} />
+      <React.Fragment>
+        <div className="Vegetables">
+          <div>蔬菜类中心</div>
+          {/* <Input defaultValue={inputValue} onChange={this.onInputChange} />
         <Select disabled={false} placeholder="请选择" value={this.state.select} options={this.options} onChange={this.onSelectChange} />
         <MultipleSelect disabled={false} value={selectList} options={this.options} onChange={this.onMultipleSelectChange} />
         <CheckBox checked={radioChecked} onChange={this.radioChange} />
@@ -195,18 +292,30 @@ class Vegetables extends Component {
         <div className="Vegetables__animation">
           <QueryPanel onQueryClick={this.onQueryClick} />
         </div> */}
-        <div className="Vegetables__animation">
-          <div className="btn-box">
-            <Button
-              text="选中数据"
-              onClick={() => {
-                console.log('点击了选中数据', tableConfig.getAllSelections, tableConfig.isAllCheck);
-              }}
-            />
+          <div className="Vegetables__animation">
+            <div className="btn-box">
+              <Button
+                text="选中数据"
+                onClick={() => {
+                  console.log('点击了选中数据', tableConfig.getAllSelections, tableConfig.isAllCheck);
+                }}
+              />
+              <Button text="弹出框1" onClick={this.showModal} />
+              <Button text="弹出框2" onClick={this.showModal2} />
+            </div>
+            <div className="time-box">
+              <DTPicker />
+            </div>
+            {/* <Table
+              data={tableData}
+              dataTotal={100}
+              config={tableConfig}
+              pageSizeOptions={[10, 20, 30, 50]}
+              currentPageChange={this.currentPageChange}
+              pageSizeChange={this.pageSizeChange}
+            /> */}
           </div>
-          <Table config={tableConfig} />
-        </div>
-        {/* <div className="Vegetables__search-box">
+          {/* <div className="Vegetables__search-box">
           <Select disabled={true} placeholder="请选择" select={this.state.select} options={this.options} onChange={this.onSelectChange} />
           <MultipleSelect disabled={true} selectList={selectList} options={this.options} onChange={this.onMultipleSelectChange} />
           <Input value="默认文字" disabled={true} />
@@ -214,7 +323,42 @@ class Vegetables extends Component {
           <Switch onChange={this.radioChange} id="radio001" value="01" checked={radioChecked} />
         </div>
         <Button text="查询"></Button> */}
-      </div>
+        </div>
+
+        <Formik
+          // 这里定义了控件的初始值
+          initialValues={{ email: '', password: '', age: 0 }}
+          // 在这里做表单控件值的校验
+          validate={values => {
+            const errors = {};
+            if (!values.email) errors.email = '邮箱必填';
+
+            if (!values.password) errors.email = '密码必填';
+            return errors;
+          }}
+          // 这里是表单提交后的逻辑
+          onSubmit={(values, { setSubmitting }) => {
+            setTimeout(() => {
+              console.log('提交的values', values);
+              // 设置是否处于提交中的状态
+              setSubmitting(false);
+            }, 2000);
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <Field type="number" name="age"></Field>
+              <Field type="email" name="email"></Field>
+              <ErrorMessage name="email" component="div" />
+              <Field type="password" name="password" />
+              <ErrorMessage name="password" component="div" />
+              <button style={{ background: 'red' }} type="submit" disabled={isSubmitting}>
+                提交
+              </button>
+            </Form>
+          )}
+        </Formik>
+      </React.Fragment>
     );
   }
 }

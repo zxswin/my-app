@@ -1,0 +1,135 @@
+@import '../../static/style/css-public.color.scss';
+@import '../../static/style/css-public.size.scss';
+@import '../../static/style/css-public.scss';
+
+.UI-Modal {
+  $m-opcity: $opcity; // 透明色
+  $m-bgcontain: $white; // 主要内容的背景色
+  $m-contain-h: 50px; // 内容区头部的高度
+  $m-contain-f: 50px; // 内容区尾部的高度
+  $m-bdcolor: $border-color-default; // 边框的颜色
+  $m-min-width: 520px; // 最小宽度
+  $m-min-height: 220px; // 最小高度
+  $m-min-width-info: 414px; // 提示框的宽度
+  $m-min-height-info: 170px; // 提示框的高度
+  $m-padding: 15px; // padding值
+  $m-close-size: 20px; // 关闭按钮的尺寸
+  $m-close-color: rgba(0, 0, 0, 0.6);
+  $m-close-color-hover: rgba(0, 0, 0, 0.8);
+  $m-tip-icon-mr: 15px; // 提示文案和左边提示框的距离
+  $m-tip-font-size: 15px; // 提示文案文字大小
+
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  background: $m-opcity;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  .UI-Modal__contain {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: $m-bgcontain;
+    min-width: $m-min-width;
+    min-height: $m-min-height;
+    max-width: 80vw;
+    max-height: 80vh;
+    overflow: hidden;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .UI-Modal__contain--header {
+      width: 100%;
+      height: $m-contain-h;
+      border-bottom: 1px solid $m-bdcolor;
+      @include flex-row-between;
+      padding: $m-padding;
+
+      .UI-Modal__contain--header-close {
+        display: inline-block;
+        width: $m-close-size;
+        height: $m-close-size;
+        background: $m-close-color;
+        mask-image: url(../../static/icon/ui/icon-close.svg);
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        cursor: pointer;
+        &:hover {
+          background: $m-close-color-hover;
+        }
+      }
+    }
+    .UI-Modal__contain--body {
+      width: 100%;
+      flex: 1;
+    }
+
+    .UI-Modal__contain--footer {
+      width: 100%;
+      height: $m-contain-f;
+      border-top: 1px solid $m-bdcolor;
+      @include flex-row-center;
+      justify-content: flex-end;
+      button {
+        margin-right: $m-padding;
+      }
+    }
+  }
+
+  /* 信息提示框的样式 */
+  &.UI-Modal__tip {
+    .UI-Modal__contain {
+      width: $m-min-width-info;
+      min-width: $m-min-width-info;
+      min-height: $m-min-height-info;
+
+      .UI-Modal__contain--body-tip {
+        @include flex-row-start;
+        align-items: center;
+        padding: 30px;
+        padding-bottom: 25px;
+        .UI-Modal__contain--body--icon {
+          width: 30px;
+          height: 27px;
+          mask-image: url(../../static/icon/ui/icon-warning.svg);
+          mask-repeat: no-repeat;
+          mask-size: contain;
+          background: $primary;
+          margin-right: $m-tip-icon-mr;
+
+          &.info {
+            mask-image: url(../../static/icon/ui/icon-warning.svg);
+            background: $primary;
+            transform: rotate(-180deg);
+          }
+          &.success {
+            mask-image: url(../../static/icon/ui/icon-success.svg);
+            background: $success;
+          }
+          &.warning {
+            mask-image: url(../../static/icon/ui/icon-warning.svg);
+            background: $warning;
+          }
+          &.error {
+            mask-image: url(../../static/icon/ui/icon-error.svg);
+            background: $danger;
+          }
+        }
+
+        .UI-Modal__contain--body--info {
+          flex: 1;
+          font-size: $m-tip-font-size;
+        }
+      }
+
+      .UI-Modal__contain--footer--info {
+        border-top: none;
+      }
+    }
+  }
+}

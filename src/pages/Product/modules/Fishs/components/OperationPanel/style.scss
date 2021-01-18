@@ -1,0 +1,23 @@
+@import '../../../../../../static/style/css-public.color.scss';
+@import '../../../../../../static/style/css-public.size.scss';
+@import '../../../../../../static/style/css-public.scss';
+
+.Product-Fish__OperationPanel {
+  height: calc(80vh - 100px);
+  width: 80vw;
+  min-width: 880px;
+  overflow: auto;
+  padding: 20px;
+
+  .Product__OperationPanel__input {
+    @include flex-row-start;
+    flex-wrap: wrap;
+  }
+
+  .Product__OperationPanel__textarea {
+    @include flex-column-start;
+  }
+  .Product__OperationPanel__img {
+    @include flex-column-start;
+  }
+}

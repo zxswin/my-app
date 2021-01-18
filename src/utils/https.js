@@ -5,11 +5,11 @@ import axios from 'axios';
 // 拦截请求参数
 axios.interceptors.request.use(
   function (config) {
-    console.log('请求发送前执行的动作', config);
+    // console.log('请求发送前执行的动作', config);
     return config;
   },
   function (error) {
-    console.log('请求发生错误的时候执行');
+    // console.log('请求发生错误的时候执行');
     return Promise.reject(error);
   }
 );
@@ -17,12 +17,12 @@ axios.interceptors.request.use(
 // 拦截响应数据
 axios.interceptors.response.use(
   function (response) {
-    console.log('获取响应数据时候执行的动作', response);
+    // console.log('获取响应数据时候执行的动作', response);
     response.addData = '响应数据被拦截了';
     return response;
   },
   function (error) {
-    console.log('响应发生错误的时候执行');
+    // console.log('响应发生错误的时候执行');
     return Promise.reject(error);
   }
 );

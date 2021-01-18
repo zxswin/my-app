@@ -4,8 +4,8 @@
 
 $tb-bg: #fff;
 $tb-bdcolor: $bdgrey;
-$tb-th-height: 55px;
-$tb-td-height: 55px;
+$tb-th-height: 45px;
+$tb-td-height: 45px;
 $tb-th-bgcolor: #fafafa;
 $sort-icon-color: rgb(191, 191, 191);
 
@@ -29,6 +29,24 @@ $sort-icon-color: rgb(191, 191, 191);
 .UI-Table {
   position: relative;
   border: 1px solid $tb-bdcolor;
+  .UI-Table__empty {
+    height: 200px;
+    @include flex-column-center;
+    .UI-Table__empty--icon {
+      height: 100px;
+      width: 100px;
+      mask-image: url(../../static/icon/ui/icon-empty.svg);
+      mask-repeat: no-repeat;
+      mask-size: contain;
+      background-color: rgba($bdgrey, 1);
+    }
+    .UI-Table__empty--txt {
+      position: relative;
+      top: -25px;
+      left: -10px;
+      color: $icon-grey;
+    }
+  }
   .UI-Table__contain {
     border-right: none;
     background: $tb-bg;
@@ -81,10 +99,54 @@ $sort-icon-color: rgb(191, 191, 191);
         }
       }
 
-      tbody tr {
-        border-bottom: 1px solid $tb-bdcolor;
-        &:last-of-type {
-          border: none;
+      tbody {
+        tr {
+          border-bottom: 1px solid $tb-bdcolor;
+          &:last-of-type {
+            border: none;
+          }
+          &:hover {
+            background: $tb-th-bgcolor;
+          }
+        }
+
+        .UI-Table__table--cell--txt {
+          text-align: center;
+          display: inline-block;
+          span {
+            @include ellipsis;
+            max-width: 80%;
+            display: inline-block;
+          }
+        }
+
+        .UI-Table__operation {
+          @include flex-row-center;
+          span.icon {
+            margin-right: 10px;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            cursor: pointer;
+            background-color: $primary;
+
+            &.detail {
+              width: 30px;
+              height: 30px;
+              mask-image: url(../../static/icon/ui/icon-detail.svg);
+            }
+
+            &.modify {
+              width: 28px;
+              height: 28px;
+              mask-image: url(../../static/icon/ui/icon-modify.svg);
+            }
+
+            &.delete {
+              width: 25px;
+              height: 25px;
+              mask-image: url(../../static/icon/ui/icon-delete.svg);
+            }
+          }
         }
       }
 
@@ -99,5 +161,24 @@ $sort-icon-color: rgb(191, 191, 191);
         @include cellstyle;
       }
     }
+
+    /* 取消td和th边框 */
+    &.UI-Table__table--no-td-border {
+      thead {
+        th {
+          border-right: none;
+        }
+      }
+
+      tbody {
+        td {
+          border-right: none;
+        }
+      }
+    }
   }
+}
+
+.UI-Table__Pagination {
+  text-align: right;
 }

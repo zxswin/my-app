@@ -1,24 +1,9 @@
 @import './css-public.color.scss';
 @import './css-public.size.scss';
 
-/*公共方法*/
+/* 清除浮动*/
 @mixin clear {
   clear: both;
-}
-@mixin clearleft {
-  clear: left;
-}
-@mixin clearright {
-  clear: right;
-}
-@mixin floatleft {
-  float: left;
-}
-@mixin floatright {
-  float: right;
-}
-@mixin cursor {
-  cursor: pointer;
 }
 
 /* flex布局 */
@@ -77,7 +62,7 @@
   opacity: 0.5;
   cursor: not-allowed;
   &:hover {
-    outline: 1px solid $bdgrey;
+    border: 1px solid $bdgrey;
   }
 }
 
@@ -85,15 +70,15 @@
 @mixin defaultInput {
   width: 100%;
   height: $input-height-default;
-  outline: 1px solid $border-color-default;
+  border: 1px solid $border-color-default;
   transition: all 0.3 ease;
   padding-left: 10px;
 
   &:hover {
-    outline: 1px solid $primary;
+    border: 1px solid $primary;
   }
   &:focus {
-    outline: 1px solid $primary;
+    border: 1px solid $primary;
     box-shadow: 0 0 1px 3px rgba($primary, 0.3);
   }
   &:disabled {
@@ -104,12 +89,12 @@
 
 /** 自定义复选框样式  */
 @mixin custom_checkbox {
-  outline: 1px solid $bdgrey;
+  border: 1px solid $bdgrey;
   border-radius: 3px;
   padding: 1px;
 
   &:hover {
-    outline: 1px solid $primary;
+    border: 1px solid $primary;
   }
 
   label {
@@ -198,11 +183,12 @@
   }
 }
 
-/* 按钮的默认样式  */
-@mixin defaultButton($width: 80px, $height: $input-height-default, $bgcolor: $primary) {
-  @include flex-column-center();
+/* 按钮的主题样式  */
+@mixin primaryButton($width: 80px, $height: $input-height-default, $bgcolor: $primary) {
   width: $width;
   height: $height;
+  line-height: $height;
+  text-align: center;
   background: $bgcolor;
   border: 1px solid $bgcolor;
   color: #fff;
@@ -213,6 +199,27 @@
     background: lighten($bgcolor, 10%);
     border: 1px solid lighten($bgcolor, 10%);
     color: lighten(#fff, 10%);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    background: $bg-disabled;
+    border: 1px solid $bdgrey;
+    color: $bdgrey;
+  }
+}
+
+/* 按钮的默认样式  */
+@mixin defaultButton($width: 80px, $height: $input-height-default, $bgcolor: $primary) {
+  @include primaryButton($width, $height, $bgcolor);
+
+  color: $default;
+  background-color: $white;
+  border: 1px solid $border-color-default;
+  &:hover {
+    background: $white;
+    border: 1px solid $bgcolor;
+    color: $bgcolor;
   }
 
   &:disabled {

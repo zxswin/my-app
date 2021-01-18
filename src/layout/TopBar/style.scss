@@ -1,10 +1,17 @@
 @import '../../static/style/css-public.color.scss';
 @import '../../static/style/css-public.size.scss';
+@import '../../static/style/css-public.scss';
 .HomePage-TopBar {
   width: 100%;
+  height: 60px;
+  border: 1px solid $boder-color-grey;
   margin-bottom: $bottom-size-main;
-  .HomePage-TopBar-contain {
-    height: 60px;
-    border: 1px solid $boder-color-grey;
+  @include flex-row-between;
+
+  .HomePage-TopBar__contain {
+    font-size: 16px;
+  }
+  .HomePage-TopBar__operation {
+    @include flex-row-start;
   }
 }

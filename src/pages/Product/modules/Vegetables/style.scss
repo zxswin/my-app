@@ -1,4 +1,6 @@
 .Vegetables {
+  padding-bottom: 500px;
+
   .Vegetables__search-box {
     width: 240px;
   }
@@ -9,5 +11,13 @@
     .btn-box {
       margin-bottom: 20px;
     }
+    .time-box {
+      padding-top: 20px;
+    }
   }
+}
+.vm-box {
+  width: 1000px;
+  height: 200px;
+  border: 1px solid #f00;
 }

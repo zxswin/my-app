@@ -1,125 +1,41 @@
 import _ from 'lodash';
-import $ from 'jquery';
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import classnames from 'classnames';
 import CheckBox from '../CheckBox';
+import Pagination from '../Pagination';
 import './style.scss';
 
-const tableData1 = [
-  { name: '小明1', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明2', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明3', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明4', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明5', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明6', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明7', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明8', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明9', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明10', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明11', age: 10, class: '一班', sore: '99分', operation: '1' },
-  { name: '小明12', age: 10, class: '一班', sore: '99分', operation: '1' },
-];
+/**
+ * 本地分页根据当前页码和每页需要展示条码返回指定的数据
+ * @param {number} currentPage 当前页码
+ * @param {number} currPageSize 当前每一页需要展示的数量
+ * @param {array} data 表格数据
+ * @returns {array} 返回的需要展示的表格数据
+ */
+const getTableShowData = (currentPage, currPageSize, data, localPaging) => {
+  let currentTableData = _.cloneDeep(data);
+  if (localPaging) {
+    const start = (currentPage - 1) * currPageSize;
+    const end = currentPage * currPageSize;
+    currentTableData = currentTableData.slice(start, end);
+  }
 
-const modifyClick = (row, index, value) => {
-  console.log('点击了修改按钮', row, index, value);
-};
-
-const deleteClick = (row, index, value) => {
-  console.log('点击了删除按钮', row, index, value);
+  return currentTableData;
 };
 
 /* 表格组件 */
 const Table = props => {
-  const defaultConfig = {
-    // 获取表格数据的url
-    url: '',
-    cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
-    striped: true, //表格显示条纹，默认为false
-    pagination: true, // 在表格底部显示分页组件，默认false
-    pageList: [10, 20], // 设置页面可以显示的数据条数
-    pageSize: 10, // 页面数据条数
-    pageNumber: 1, // 首页页码
-    sidePagination: 'server', // 设置为服务器端分页
-    queryParams: function (params) {
-      // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
-      return {
-        pageSize: params.limit, // 每页要显示的数据条数
-        offset: params.offset, // 每页显示数据的开始行号
-        sort: params.sort, // 要排序的字段
-        sortOrder: params.order, // 排序规则
-        dataId: 0, // 额外添加的参数
-      };
-    },
-    sortName: 'id', // 要排序的字段
-    sortOrder: 'desc', // 排序规则
-    // 加载成功的时候执行
-    onLoadSuccess: () => {},
-    // 加载失败的时候执行
-    onLoadError: () => {},
-    // 固定表格头部
-    fixedHeader: {
-      height: '400px',
-    },
-    // 固定表格的右侧
-    fixedRight: {
-      fixedLen: 2,
-      style: {
-        width: '500px',
-      },
-    },
-    // 表头配置项
-    columns: [
-      {
-        checkbox: true, // 显示一个勾选框
-        align: 'center', // 居中显示
-        field: 'name1', // 返回json数据中的name
-        title: '1', // 表格表头显示文字
-      },
-      // {
-      //   radio: true, // 显示一个单选按钮
-      //   align: 'center', // 居中显示
-      // },
-      {
-        field: 'name', // 返回json数据中的name
-        title: '姓名', // 表格表头显示文字
-        align: 'center', // 左右居中
-        valign: 'middle', // 上下居中
-        sort: true, // 是否支持排序
-      },
-      {
-        field: 'age', // 返回json数据中的name
-        title: '年龄', // 表格表头显示文字
-        sort: true, // 是否支持排序
-        width: '200px',
-      },
-      {
-        field: 'class', // 返回json数据中的name
-        title: '班级', // 表格表头显示文字
-        sort: true, // 是否支持排序
-      },
-      {
-        field: 'sore', // 返回json数据中的name
-        title: '分数', // 表格表头显示文字
-      },
-      {
-        field: 'operation', // 返回json数据中的name
-        title: '操作', // 表格表头显示文字
-        formatter: (value, row, index) => {
-          return (
-            <div>
-              <div onClick={() => modifyClick(row, index, value)}>修改</div>
-              <div onClick={() => deleteClick(row, index, value)}>删除</div>
-            </div>
-          );
-        },
-      },
-    ],
-    // 表格数据
-    data: tableData1,
-  };
-
-  const { config = defaultConfig, className = '' } = props;
-  const { columns, data } = config;
+  const {
+    data = [], // 表格数据
+    config = {}, // 表格配置项
+    pageSizeOptions = [10, 30, 50, 100], // 表格自定义pageSize列表
+    className = '', // 自定义类名
+    pageSizeChange = () => {}, // 改变pageSize触发的事件
+    currentPageChange = () => {}, // 改变当前激活的页面
+    dataTotal, // 数据总条目 如果是服务器端分页则需要传入
+    noTdborder = false, // 取消td和th的边框
+  } = props;
+  const { columns = [], localPaging = false, showPagination = true } = config;
 
   console.log('表格组件函数重新渲染');
 
@@ -136,7 +52,37 @@ const Table = props => {
   };
 
   const copyData = useMemo(() => createTableData(data), [data]);
-  const [tableData, setTableData] = useState(copyData);
+
+  // =========== 页面切换相关逻辑 ===========
+  // 当前激活的页码
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currPageSize, setCurrPageSize] = useState(pageSizeOptions[0]);
+  // 切换当前激活页码的事件
+  const onChangeCurrentPage = num => {
+    setCurrentPage(num);
+    currentPageChange && currentPageChange(num);
+  };
+
+  // 切换当前每页展示多少条数据
+  const onChangePageSize = pageSize => {
+    setCurrPageSize(pageSize);
+    setCurrentPage(1);
+    pageSizeChange && pageSizeChange(pageSize);
+  };
+
+  // =========== 本地分页相关逻辑 ===========
+
+  // 本地分页的pageSize列表
+  const total = dataTotal ? dataTotal : copyData.length; // 当前的数据总数
+  const currentTableData = useMemo(() => getTableShowData(currentPage, currPageSize, copyData, localPaging), [
+    currentPage,
+    currPageSize,
+    copyData,
+    localPaging,
+  ]);
+
+  // 设置表格数据相关
+  const [tableData, setTableData] = useState(currentTableData);
 
   // =========== 数据选中状态逻辑 ===========
   // 全选按钮状态
@@ -184,11 +130,14 @@ const Table = props => {
     }
   };
 
-  // 给columns配置中添加记录排序状态的字段
-  const columnsConfigs = columns.map(item => {
-    item.sortStatus = null;
-    return item;
-  });
+  // 对columns配置中添加记录排序状态的字段进行初始化
+  const columnsInitConfigs = useCallback(() => {
+    const columnsCofigs = columns.map(item => {
+      item.sortStatus = null;
+      return item;
+    });
+    return columnsCofigs;
+  }, [columns]);
 
   // =========== 排序部分逻辑 ===========
   /**
@@ -204,7 +153,7 @@ const Table = props => {
   };
 
   // 记录每个字段的排序状态
-  const [columnsData, setColumnsData] = useState(columnsConfigs);
+  const [columnsData, setColumnsData] = useState(columnsInitConfigs());
   // 点击切换字段排序状态
   const changeFieldSore = useCallback(
     column => {
@@ -233,12 +182,12 @@ const Table = props => {
       if (sortStatus) {
         sortData = _.orderBy(sortData, [column.field], [orderType]);
       } else {
-        sortData = _.cloneDeep(copyData);
+        sortData = _.cloneDeep(currentTableData);
         setStatusToTableData(sortData, tableData);
       }
       setTableData(sortData);
     },
-    [columnsData, tableData, copyData]
+    [columnsData, tableData, currentTableData]
   );
 
   // =========== 固定表格头部,相关固定列逻辑 ===========
@@ -256,13 +205,8 @@ const Table = props => {
   const fixedLeftTableRef = useRef(null); // 固定左侧表格容器
   const scrollSize = 7;
 
-  // 生命周期函数
-  useEffect(() => {
-    // 初始化config数据
-    console.log('config数据初始化');
-    config.getAllSelections = []; // 获取全选的数据
-    config.isAllCheck = false; // 是否处于全选状态
-
+  /** 表格初始化及固定表格相关逻辑  */
+  const tableDataInit = useCallback(() => {
     // 固定表格头部和列的相关逻辑
     // 设置表格宽度
     const tableContain = window.getComputedStyle(containRef.current);
@@ -293,11 +237,13 @@ const Table = props => {
         // 如果是固定顶部需重新计算容器宽度受滚动条的影响
         if (config.fixedHeader) {
           // 如果内容高度小于容器高度则从新设置容器高度
+
           if (mainTableHeight > mainTableWrapHeight) {
             width = parseInt(width) - 2 + 'px';
             mainTable.style.height = parseInt(mainTableWrapHeight) + 2 + 'px';
           } else {
             width = parseInt(width) - 2 - scrollSize + 'px';
+            mainTable.style.height = fixConfigHeaderStyle.height;
           }
         }
 
@@ -335,11 +281,22 @@ const Table = props => {
         setFixedTableSize('right', fixedRightTableRef, config.fixedRight);
       }
     }
-  }, [config, fixConfigRightStyle.width, fixConfigLeftStyle.width]);
+  }, [config, fixConfigRightStyle.width, fixConfigLeftStyle.width, fixConfigHeaderStyle.height]);
 
+  // 生命周期函数
   useEffect(() => {
-    console.log('更新都会执行');
-  });
+    // 初始化config数据
+    console.log('config数据初始化');
+    config.getAllSelections = []; // 获取全选的数据
+    config.isAllCheck = false; // 是否处于全选状态
+    setTableData(currentTableData); // 表格展示数据初始化
+
+    setCheckedAll(false); // 设置全选按钮状态
+    setColumnsData(columnsInitConfigs());
+    setTimeout(() => {
+      tableDataInit(); // 表格相关尺寸初始化
+    });
+  }, [config, currentTableData, tableDataInit, columnsInitConfigs]);
 
   /**
    * 设置左侧或右侧固定表格的相关初始化尺寸
@@ -391,7 +348,8 @@ const Table = props => {
           <CheckBox id="tb-checkbox-all" checked={checkedAll} onChange={checkedAllChangeHandle} />
         ) : (
           <div>
-            <span>{column.title}</span>
+            {/* 表头头部的th标题 */}
+            <span>{column.customTitle ? column.customTitle(column) : column.title}</span>
             {/* 排序ui部分 */}
             {column.sort && (
               <span className="UI-Table__contain--sort">
@@ -408,12 +366,19 @@ const Table = props => {
   // 渲染普通表格单元格
   const CellEl = props => {
     const { row, column, index } = props;
+    let style = column.width ? { width: column.width } : null;
     return (
       <td>
         {column.checkbox ? (
           <CheckBox id={`${row.index}`} checked={row.checked} onChange={checked => checkedChangeHandle(checked, row)} />
         ) : (
-          <div>{column.formatter ? column.formatter(row, index, row[column.field]) : <span>{row[column.field]}</span>}</div>
+          <div style={style} className={`UI-Table__table--cell--txt`}>
+            {column.formatter ? (
+              column.formatter(row, index, row[column.field])
+            ) : (
+              <span title={row[column.field]}>{row[column.field]}</span>
+            )}
+          </div>
         )}
       </td>
     );
@@ -439,7 +404,7 @@ const Table = props => {
       };
     }
     return (
-      <table className="UI-Table__table" style={style}>
+      <table className={classnames('UI-Table__table', { 'UI-Table__table--no-td-border': noTdborder })} style={style}>
         {/* 表头 */}
         <thead>
           <tr>
@@ -502,69 +467,92 @@ const Table = props => {
   const mainTbStyle = Object.assign({}, fixConfigHeaderStyle, { overflow: 'auto' });
 
   return (
-    <div ref={containRef} className={classnames('UI-Table', className)}>
-      {/* 表格主体内容 */}
-      <div
-        className={classnames('UI-Table__contain', {
-          'contain-hide': !showMainTable,
-          'contain-show': showMainTable,
-        })}
-        style={mainTbStyle}
-        ref={mainTableRef}
-      >
-        <div className="UI-Table__wrap">
-          <TableEl type="main" />
-        </div>
-      </div>
-
-      {/* 固定左侧的表格 */}
-      {config.fixedLeft && (
+    <React.Fragment>
+      <div ref={containRef} className={classnames('UI-Table', className)}>
+        {/* 表格主体内容 */}
         <div
           className={classnames('UI-Table__contain', {
-            'contain-hide': !showFixLeft,
-            'contain-show': showFixLeft,
+            'contain-hide': !showMainTable,
+            'contain-show': showMainTable,
           })}
-          ref={fixedLeftTableRef}
-          style={leftTbStyle}
-        >
-          <div className="UI-Table__wrap" style={leftTbStyle}>
-            <TableEl type="fixedLeft" />
-          </div>
-        </div>
-      )}
-
-      {/* 固定右侧的表格 */}
-      {config.fixedRight && (
-        <div
-          className={classnames('UI-Table__contain', {
-            'contain-hide': !showFixRight,
-            'contain-show': showFixRight,
-          })}
-          ref={fixedRightTableRef}
-          style={rightTbStyle}
-        >
-          <div className="UI-Table__wrap" style={rightTbStyle}>
-            <TableEl type="fixedRight" />
-          </div>
-        </div>
-      )}
-
-      {/* 固定头部的表格 */}
-      {config.fixedHeader && (
-        <div
-          className={classnames('UI-Table__contain', {
-            'contain-hide': !showFixHeader,
-            'contain-show': showFixHeader,
-          })}
-          style={fixedTbStyle}
-          ref={fixedTopTableRef}
+          style={mainTbStyle}
+          ref={mainTableRef}
         >
           <div className="UI-Table__wrap">
-            <TableEl type="fixedTop" />
+            <TableEl type="main" />
           </div>
         </div>
+
+        {/* 固定左侧的表格 */}
+        {config.fixedLeft && (
+          <div
+            className={classnames('UI-Table__contain', {
+              'contain-hide': !showFixLeft,
+              'contain-show': showFixLeft,
+            })}
+            ref={fixedLeftTableRef}
+            style={leftTbStyle}
+          >
+            <div className="UI-Table__wrap" style={leftTbStyle}>
+              <TableEl type="fixedLeft" />
+            </div>
+          </div>
+        )}
+
+        {/* 固定右侧的表格 */}
+        {config.fixedRight && (
+          <div
+            className={classnames('UI-Table__contain', {
+              'contain-hide': !showFixRight,
+              'contain-show': showFixRight,
+            })}
+            ref={fixedRightTableRef}
+            style={rightTbStyle}
+          >
+            <div className="UI-Table__wrap" style={rightTbStyle}>
+              <TableEl type="fixedRight" />
+            </div>
+          </div>
+        )}
+
+        {/* 固定头部的表格 */}
+        {config.fixedHeader && (
+          <div
+            className={classnames('UI-Table__contain', {
+              'contain-hide': !showFixHeader,
+              'contain-show': showFixHeader,
+            })}
+            style={fixedTbStyle}
+            ref={fixedTopTableRef}
+          >
+            <div className="UI-Table__wrap">
+              <TableEl type="fixedTop" />
+            </div>
+          </div>
+        )}
+
+        {/* 如果表格数据为空 */}
+        {tableData.length === 0 && (
+          <div className="UI-Table__empty">
+            <div className="UI-Table__empty--icon"></div>
+            <div className="UI-Table__empty--txt">暂无数据</div>
+          </div>
+        )}
+      </div>
+      {/* 展示分页器 */}
+      {!!tableData.length && showPagination && (
+        <div className="UI-Table__Pagination">
+          <Pagination
+            total={total}
+            pageSizeOptions={pageSizeOptions}
+            currentPage={currentPage}
+            currPageSize={currPageSize}
+            onChangeCurrentPage={onChangeCurrentPage}
+            onChangePageSize={onChangePageSize}
+          />
+        </div>
       )}
-    </div>
+    </React.Fragment>
   );
 };
 
