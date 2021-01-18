@@ -43,7 +43,7 @@ const OperationPanel = props => {
       <h2>基本信息</h2>
       <div className="Product__OperationPanel__input">
         <FormItem label="产品id">
-          <Input disabled={true} value={panelData.id} onChange={value => valueChangeHandel(value, 'id')} />
+          <Input disabled={false} value={panelData.id} onChange={value => valueChangeHandel(value, 'id')} />
         </FormItem>
         <FormItem label="产品名称">
           <Input disabled={type === 'detail'} value={panelData.name} onChange={value => valueChangeHandel(value, 'name')} />
