@@ -1,0 +1,9 @@
+@import '../../static/style/css-public.color.scss';
+@import '../../static/style/css-public.size.scss';
+@import '../../static//style//css-public.scss';
+
+.UI-MultipleImgUpload {
+  width: 100%;
+  @include flex-row-start;
+  flex-wrap: wrap;
+}

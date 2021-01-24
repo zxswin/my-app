@@ -1,17 +1,13 @@
-import { useState } from 'react';
 import { action } from 'mobx';
 import { observer } from 'mobx-react';
 import FormItem from '../../../../../../components/FormItem';
 import Input from '../../../../../../components/Input';
-import Upload from '../../../../../../components/Upload';
-import Button from '../../../../../../components/Button';
-import { uploaderProduct } from '../../../../../Api';
+import ImgUpload from '../../../../../../components/ImgUpload';
+import MultipleImgUpload from '../../../../../../components/MultipleImgUpload';
 import './style.scss';
 
 const OperationPanel = props => {
   const { panelData = {}, type } = props;
-
-  const [fileData, setFileData] = useState(null);
 
   // 基本信息的修改
   const valueChangeHandel = action((value, field) => {
@@ -19,31 +15,51 @@ const OperationPanel = props => {
   });
 
   // 选择要上传的文件
-  const onFileChange = (fd, filesSrcList) => {
-    console.log('要上传的文件', fd);
-    console.log('文件信息列表', filesSrcList);
+  const onFileChange = action(fileData => {
+    console.log('files文件上传成功', fileData);
+    const { field, files } = fileData;
 
-    setFileData(fd);
-  };
+    if (field !== 'slide_imgs') {
+      panelData[field] = files[files.length - 1].filename;
+    }
+  });
 
-  // 点击上传文件
-  const uploadClick = async () => {
-    console.log('点击上传文件');
-    if (!fileData) return;
+  // 多文件上传
+  const multipleFileChange = action((fileData, index) => {
+    console.log('files多文件上传成功', fileData);
+    const field = fileData.field;
+    const fileList = JSON.parse(panelData[field]);
+    const files = fileData.files;
+    const fileItem = {
+      src: files[files.length - 1].filename,
+    };
 
-    const uploadRes = await uploaderProduct(fileData, progressEvent => {
-      console.log('progressEvent上传进度事件', progressEvent);
-    });
+    if (!fileList[index]) {
+      fileList.push(fileItem);
+    } else {
+      fileList[index] = fileItem;
+    }
 
-    console.log('uploadRes', uploadRes);
-  };
+    panelData[field] = JSON.stringify(fileList);
+  });
+
+  // 多文件上传关闭某个上传控件
+  const multipleFileClose = action((index, field) => {
+    const fileList = JSON.parse(panelData[field]);
+    if (fileList[index]) {
+      fileList.splice(index, 1);
+    }
+
+    console.log('fileList', fileList);
+    panelData[field] = JSON.stringify(fileList);
+  });
 
   return (
     <div className="Product-Fish__OperationPanel">
       <h2>基本信息</h2>
       <div className="Product__OperationPanel__input">
         <FormItem label="产品id">
-          <Input disabled={false} value={panelData.id} onChange={value => valueChangeHandel(value, 'id')} />
+          <Input placeholder="产品id" disabled={true} value={panelData.id} onChange={value => valueChangeHandel(value, 'id')} />
         </FormItem>
         <FormItem label="产品名称">
           <Input disabled={type === 'detail'} value={panelData.name} onChange={value => valueChangeHandel(value, 'name')} />
@@ -72,38 +88,55 @@ const OperationPanel = props => {
         <FormItem label="产品标准规格">
           <Input disabled={type === 'detail'} value={panelData.standard} onChange={value => valueChangeHandel(value, 'standard')} />
         </FormItem>
-        <FormItem label="产品内容">
-          <Input disabled={type === 'detail'} value={panelData.content} onChange={value => valueChangeHandel(value, 'content')} />
-        </FormItem>
       </div>
       <h2>图片视频信息</h2>
+
       <div className="Product__OperationPanel__img">
-        <img alt="图标" src={panelData.icon_url} />
-        <FormItem label="产品图标上传">
-          <Upload onChange={(fd, filesSrcList) => onFileChange(fd, filesSrcList)} text="上传文件" />
-          <Button onClick={uploadClick} text="文件上传" />
-        </FormItem>
-        <FormItem label="产品视频">
-          <Input value={panelData.video_url} onChange={() => {}} />
-        </FormItem>
+        <ImgUpload
+          field="icon_url"
+          src={panelData.icon_url}
+          type={panelData.type}
+          label="图片缩略图"
+          onFileChange={fileData => onFileChange(fileData)}
+          text="上传图片"
+          disabled={type === 'detail'}
+        />
+        <ImgUpload
+          field="video_url"
+          src={panelData.icon_url}
+          type={panelData.type}
+          label="视频上传"
+          onFileChange={fileData => onFileChange(fileData)}
+          text="上传视频"
+          disabled={type === 'detail'}
+        />
       </div>
       <h2>幻灯片大图信息</h2>
       <div className="Product__OperationPanel__img">
-        <FormItem label="幻灯片图片集">
-          <Input value={panelData.slide_imgs} onChange={() => {}} />
-        </FormItem>
-        <FormItem label="幻灯片图片集">
-          <Input value={panelData.slide_imgs} onChange={() => {}} />
-        </FormItem>
-        <FormItem label="幻灯片图片集">
-          <Input value={panelData.slide_imgs} onChange={() => {}} />
-        </FormItem>
-        <FormItem label="幻灯片图片集">
-          <Input value={panelData.slide_imgs} onChange={() => {}} />
-        </FormItem>
-        <FormItem label="幻灯片图片集">
-          <Input value={panelData.slide_imgs} onChange={() => {}} />
-        </FormItem>
+        <MultipleImgUpload
+          fileList={panelData.slide_imgs}
+          field="slide_imgs"
+          type={panelData.type}
+          label="幻灯片焦点图"
+          onFileChange={(fileData, index) => multipleFileChange(fileData, index)}
+          onFileClose={(index, field) => multipleFileClose(index, field)}
+          text="上传图片"
+          disabled={type === 'detail'}
+        />
+      </div>
+
+      <h2>内容区图片信息</h2>
+      <div className="Product__OperationPanel__img">
+        <MultipleImgUpload
+          fileList={panelData.content}
+          field="content"
+          type={panelData.type}
+          label="内容区图片"
+          onFileChange={(fileData, index) => multipleFileChange(fileData, index)}
+          onFileClose={(index, field) => multipleFileClose(index, field)}
+          text="上传图片"
+          disabled={type === 'detail'}
+        />
       </div>
     </div>
   );

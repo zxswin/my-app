@@ -1,80 +1,109 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import Store from './store';
-import { getUserList, addUserItem } from '../../../Api';
-import './style.scss';
 
-//import { atan2, chain, derivative, format, e, evaluate, log, pi, pow, round, sqrt } from 'mathjs';
-
-import math from '../../../../utils/math';
-
-// import * as math from 'mathjs';
-
-// math.config({
-//   number: 'BigNumber',
-//   precision: 64,
-// });
+import ReactEcharts from 'echarts-for-react';
 
 @observer
 class TestComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    this.store = Store.getInstance();
-    this.fishData = this.store.fishData;
+  // option中每个属性就表示一类组件
+  // 属性值可以是一个数组表示多种类型的组件 回渲染多个组件实例
+  option = {
+    backgroundColor: '#2c343c',
+    visualMap: {
+      show: false,
+      min: 80,
+      max: 600,
+      inRange: {
+        colorLightness: [0, 1],
+      },
+    },
+    series: [
+      {
+        name: '访问来源',
+        type: 'pie',
+        radius: '55%',
+        data: [
+          { value: 235, name: '视频广告' },
+          { value: 274, name: '联盟广告' },
+          { value: 310, name: '邮件营销' },
+          { value: 335, name: '直接访问' },
+          { value: 400, name: '搜索引擎' },
+        ],
+        roseType: 'angle',
+        label: {
+          normal: {
+            textStyle: {
+              color: 'rgba(255, 255, 255, 0.3)',
+            },
+          },
+        },
+        labelLine: {
+          normal: {
+            lineStyle: {
+              color: 'rgba(255, 255, 255, 0.3)',
+            },
+          },
+        },
+        itemStyle: {
+          normal: {
+            color: '#c23531',
+            shadowBlur: 200,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+          },
+        },
+      },
+    ],
+  };
 
-    console.log(math.round(1.2366, 3)); // 1.237
+  // 图表的ref对象
+  echarts_react = null;
 
-    const num1 = math.evaluate('0.2 * 0.11');
+  componentDidMount() {
+    const echarts_instance = this.echarts_react.getEchartsInstance();
 
-    console.log(num1);
+    const base64 = echarts_instance.getDataURL();
 
-    console.log(math.format(math.evaluate('0.2 * 0.1'), { precision: 14 })); // '0.2'
-
-    const num = math.chain(3).add(4).multiply(2).subtract(4).divide(2).done(); // 5
-    console.log('num', num);
+    console.log('base64', base64);
   }
 
-  componentDidMount() {}
-
-  // 查询用户列表
-  queryUserList = async () => {
-    const testData = [1, 2, 3, 4];
-
-    const data = await getUserList();
-    console.log('获取到的数据888999666', data, testData);
+  // 图表点击事件
+  onChartClick = () => {
+    console.log('echarts被点击了');
   };
 
-  // 新增用户
-  addUser = async () => {
-    const data = await addUserItem();
-    console.log('调用新增接口返回的数据', data);
+  // 图表事件
+  onEvents = {
+    click: this.onChartClick,
   };
 
-  // 改变mobx数据
-
-  changeFishData = () => {
-    this.store.setFishDate({ id: 1100011119999 });
+  // 图表已经加载完毕了
+  onChartReady = optional => {
+    console.log('图表已经加载');
+    console.log('图表配置项', optional);
   };
+
+  // 图片加载的配置数据
+  loadingOption = {};
 
   render() {
-    const fishData = this.fishData;
     return (
-      <div className="Fishs">
-        <div>鱼类中心{fishData.name}</div>
-        <div className="fishs_content-input">
-          <p>{fishData.id}</p>
-          <button type="button" onClick={this.changeFishData}>
-            改变fishid
-          </button>
-
-          <button type="button" onClick={this.addUser}>
-            新增用户
-          </button>
-          <button type="button" onClick={this.queryUserList}>
-            查询用户
-          </button>
-        </div>
+      <div>
+        <ReactEcharts
+          style={{ height: '300px', width: '100%' }}
+          onEvents={this.onEvents}
+          theme="infographic"
+          className="echart-classname"
+          notMerge={true}
+          lazyUpdate={true}
+          option={this.option}
+          opts={{ renderer: 'svg' }}
+          ref={e => {
+            this.echarts_react = e;
+          }}
+          onChartReady={this.onChartReady}
+          loadingOption={this.loadingOption}
+          showLoading={false} // 是否展示加载遮罩
+        />
       </div>
     );
   }

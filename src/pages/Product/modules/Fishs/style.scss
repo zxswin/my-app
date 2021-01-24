@@ -6,6 +6,11 @@ $mb-size: $bottom-size-query; // 查询模块下方间距
   .Product-Fishs__query-panel {
     margin-bottom: $mb-size;
   }
+  .Product-Fishs__operation {
+    @include flex-row-start;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+  }
   .Product-Fishs__query-table {
   }
 }

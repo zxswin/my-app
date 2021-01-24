@@ -1,0 +1,55 @@
+@import '../../static/style/css-public.color.scss';
+@import '../../static/style/css-public.size.scss';
+@import '../../static//style//css-public.scss';
+
+$preview-size: 120px;
+$margin-size: 10px;
+$close-btn-size: 25px;
+
+.UI-ImgUpload {
+  @include flex-column-center;
+
+  margin-right: $margin-size;
+  .UI-ImgUpload--lable {
+    margin: 10px 0;
+  }
+  .UI-ImgUpload--img-name {
+    padding-bottom: 5px;
+  }
+  .UI-ImgUpload--preview {
+    position: relative;
+    width: $preview-size;
+    height: $preview-size;
+    border: 1px solid $border-color-default;
+    @include flex-row-center;
+    margin-bottom: $margin-size;
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .UI-ImgUpload--close {
+    @include flex-row-center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: $close-btn-size;
+    height: $close-btn-size;
+    border: 1px solid $primary;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: $white;
+    .UI-ImgUpload--close-btn {
+      display: inline-block;
+      width: 80%;
+      height: 80%;
+      background-color: $primary;
+      mask-image: url(../../static/icon/ui/icon-close.svg);
+      mask-repeat: no-repeat;
+      mask-size: contain;
+    }
+  }
+}

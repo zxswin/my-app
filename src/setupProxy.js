@@ -6,9 +6,9 @@ module.exports = function (app) {
       target: 'http://localhost:7001',
       pathRewrite: { '/api': '' },
     }),
-    createProxyMiddleware('/public/img', {
-      target: 'http://localhost:7001/public/img',
-      pathRewrite: { '/public/img/': '' },
+    createProxyMiddleware('/public', {
+      target: 'http://localhost:7001/public',
+      pathRewrite: { '/public': '' },
     })
   );
 };

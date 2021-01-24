@@ -1,0 +1,30 @@
+@import '../../static/style/css-public.color.scss';
+@import '../../static/style/css-public.size.scss';
+@import '../../static/style/css-public.scss';
+.UI-Upload {
+  position: relative;
+  .UI-Upload--file-input {
+    opacity: 0;
+    width: 82px;
+    height: 34px;
+    cursor: pointer;
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+  .UI-Upload--upload-btn {
+    @include primaryButton;
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+  }
+
+  .UI-Upload--upload-btn-disabled {
+    cursor: not-allowed;
+    background: $bg-disabled;
+    border: 1px solid $bdgrey;
+    color: $bdgrey;
+  }
+}

@@ -66,6 +66,44 @@ function modifyProduct(modifyData) {
   });
 }
 
+/** 新增产品信息  */
+function addProduct(addData) {
+  return new Promise((resolve, reject) => {
+    axiosRequest({
+      options: {
+        url: '/api/product/add',
+        method: 'post',
+        data: addData,
+      },
+      success(data) {
+        resolve(data);
+      },
+      error(err) {
+        reject(err);
+      },
+    });
+  });
+}
+
+/** 删除产品信息  */
+function deleteProduct(deleteData) {
+  return new Promise((resolve, reject) => {
+    axiosRequest({
+      options: {
+        url: '/api/product/delete',
+        method: 'post',
+        data: deleteData,
+      },
+      success(data) {
+        resolve(data);
+      },
+      error(err) {
+        reject(err);
+      },
+    });
+  });
+}
+
 /** 产品文件上传  */
 function uploaderProduct(uploadData, onUploadProgress) {
   return new Promise((resolve, reject) => {
@@ -74,7 +112,7 @@ function uploaderProduct(uploadData, onUploadProgress) {
         url: '/api/uploader/product',
         method: 'post',
         data: uploadData,
-        onUploadProgress: onUploadProgress, // 上传文件的进度事件
+        onUploadProgress: onUploadProgress ? onUploadProgress : () => {}, // 上传文件的进度事件
       },
       success(data) {
         resolve(data);
@@ -123,4 +161,4 @@ function addUserItem() {
   });
 }
 
-export { userLogin, getUserList, addUserItem, getProduct, modifyProduct, uploaderProduct };
+export { userLogin, getUserList, addUserItem, getProduct, modifyProduct, uploaderProduct, addProduct, deleteProduct };

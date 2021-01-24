@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react';
-import { action, toJS } from 'mobx';
+import _ from 'lodash';
+import { action, toJS, runInAction } from 'mobx';
 import QueryPanel from '../../../../components/QueryPanel';
 import Table from '../../../../components/Table';
-import { getProduct, modifyProduct } from '../../../Api';
+import Button from '../../../../components/Button';
+import { getProduct, modifyProduct, addProduct, deleteProduct } from '../../../Api';
 import Modal from '../../../../components/Modal';
 import OperationPanel from './components/OperationPanel';
-import Store from './store';
+import Store, { defaultPanelData } from './store';
 import './style.scss';
 
 // mobx缓存数据
 const store = Store.getInstance();
 
+// 点击了明细按钮
 const detailClick = action((row, index, value) => {
   console.log('点击了明细按钮', row, index, value);
   store.currentData = row;
@@ -21,6 +24,7 @@ const detailClick = action((row, index, value) => {
   });
 });
 
+// 点击了修改按钮
 const modifyClick = action((row, index, value) => {
   console.log('点击了修改按钮', row, index, value);
   store.currentData = row;
@@ -44,6 +48,11 @@ const modifyClick = action((row, index, value) => {
             children: <div>修改成功</div>,
           });
         }, 300);
+
+        // 重新刷新列表
+
+        store.onQueryClick(store.queryData);
+
         return true;
       }
 
@@ -59,8 +68,89 @@ const modifyClick = action((row, index, value) => {
   });
 });
 
+// 点击了删除按钮
 const deleteClick = (row, index, value) => {
-  console.log('点击了删除按钮', row, index, value);
+  console.log('点击了修改按钮', row, index, value);
+  store.currentData = row;
+  Modal.showModal({
+    title: '删除产品',
+    children: <div>你确定要删除{row.name}产品吗？</div>,
+
+    onConfirm: async () => {
+      const deleteRes = await deleteProduct(store.currentData);
+
+      const { errmsg } = deleteRes.data;
+
+      console.log(deleteRes);
+
+      // 删除成功
+      if (!errmsg) {
+        setTimeout(() => {
+          Modal.showModal({
+            type: 'success',
+            children: <div>删除成功</div>,
+          });
+        }, 300);
+
+        // 重新刷新列表
+        store.onQueryClick(store.queryData);
+
+        return true;
+      }
+
+      // 删除失败
+      setTimeout(() => {
+        Modal.showModal({
+          type: 'error',
+          children: <div>删除失败{errmsg}</div>,
+        });
+      }, 300);
+      return true;
+    },
+  });
+};
+
+// 点击了新增按钮
+const addClick = () => {
+  console.log('点击了新增按钮');
+  store.currentData = _.cloneDeep(defaultPanelData);
+  Modal.showModal({
+    title: '产品新增',
+    children: <OperationPanel panelData={store.currentData} type="add" />,
+
+    onConfirm: async () => {
+      const addRes = await addProduct(store.currentData);
+
+      const { errmsg } = addRes.data;
+
+      console.log(addRes);
+
+      // 新增成功
+      if (!errmsg) {
+        setTimeout(() => {
+          Modal.showModal({
+            type: 'success',
+            children: <div>新增成功</div>,
+          });
+        }, 300);
+
+        // 重新刷新列表
+
+        store.onQueryClick(store.queryData);
+
+        return true;
+      }
+
+      // 新增失败
+      setTimeout(() => {
+        Modal.showModal({
+          type: 'error',
+          children: <div>修改失败{errmsg}</div>,
+        });
+      }, 300);
+      return false;
+    },
+  });
 };
 
 const tableConfig = {
@@ -256,47 +346,26 @@ const queryPanelConfig = [
 ];
 
 const Fishs = () => {
-  const [tableData, setTableData] = useState([]); // 表格查询数据
-  const [total, setTotal] = useState(0); // 查询到的数据总条目
-
-  // 点击查询按钮就行查询
-  const onQueryClick = async queryData => {
-    const queryParams = {
-      // type: 'fish',
-      pageStart: 1,
-      pageSize: 10,
-    };
-
-    Object.keys(queryData).forEach(key => {
-      if (queryData[key]) {
-        queryParams[key] = queryData[key];
-      }
-    });
-
-    console.log('获取到的查询参数1', queryData, queryParams);
-
-    const tableDataRes = await getProduct(queryParams);
-    const tableData = tableDataRes.data.rows;
-    const dataTotal = tableDataRes.data.count;
-    console.log('查询结果', tableDataRes);
-
-    if (Array.isArray(tableData)) {
-      setTableData(tableData);
-      setTotal(dataTotal);
-    }
-  };
-
   const currentPageChange = () => {};
   const pageSizeChange = () => {};
+
+  useEffect(() => {
+    // 组件挂载的时候回去查询数据
+    store.onQueryClick(store.queryData);
+  }, []);
+
   return (
     <div className="Product-Fishs">
       <div className="Product-Fishs__query-panel">
-        <QueryPanel configList={queryPanelConfig} onQueryClick={onQueryClick} />
+        <QueryPanel configList={queryPanelConfig} onQueryClick={store.onQueryClick} />
+      </div>
+      <div className="Product-Fishs__operation">
+        <Button onClick={addClick} text="新增" />
       </div>
       <div className="Product-Fishs__query-table">
         <Table
-          data={tableData}
-          dataTotal={total}
+          data={store.tableData}
+          dataTotal={store.total}
           config={tableConfig}
           pageSizeOptions={[10, 20, 30, 50]}
           currentPageChange={currentPageChange}

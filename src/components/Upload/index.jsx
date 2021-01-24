@@ -1,27 +1,21 @@
-import { useState, useCallback, useRef } from 'react';
-
+import { useCallback, useRef } from 'react';
+import classnames from 'classnames';
 import './style.scss';
 
 const Upload = props => {
-  const { text, onChange } = props;
+  const { folder = 'img', text = '文件上传', disabled = false, onChange } = props;
 
   // 上传的文件数据
-  // const [formData, setFormData] = useState(null);
   const fileRef = useRef(null);
-
-  // 二进制文件相关信息
-  // const [filesSrcList, setFilesSrcList] = useState([]);
 
   // 上传控件改变事件
   const onFileChangeHandel = useCallback(() => {
     const fd = new FormData(); // 创建FormData对象
     const filesSrcList = []; // 存储文件的相关信息
-    // fd.append('name', '图片类型');
-    // fd.append('title', '文件上传');
-
     const fileDom = fileRef.current;
     const files = fileDom.files;
-    console.log('读取到的要上传的文件', files);
+
+    fd.append('folder', folder);
 
     for (let i = 0; i < files.length; i++) {
       const fileItem = files[i];
@@ -35,20 +29,27 @@ const Upload = props => {
 
       filesSrcList.push(fileItemInfo);
     }
-    // setFormData(fd);
-    // setFilesSrcList(filesSrcList);
-
-    console.log('读取到的要上传fd', fd);
 
     onChange && onChange(fd, filesSrcList);
-  }, [onChange]);
+  }, [onChange, folder]);
 
   return (
     <div className="UI-Upload">
-      <input ref={fileRef} onChange={onFileChangeHandel} type="file" multiple="multiple" />
-      <button type="button" className="UI-Upload__file">
+      <label
+        htmlFor="UI-Upload--file-input"
+        className={classnames('UI-Upload--upload-btn', { 'UI-Upload--upload-btn-disabled': disabled })}
+      >
         {text}
-      </button>
+      </label>
+      <input
+        id="UI-Upload--file-input"
+        className="UI-Upload--file-input"
+        ref={fileRef}
+        onChange={onFileChangeHandel}
+        type="file"
+        multiple="multiple"
+        disabled={disabled}
+      />
     </div>
   );
 };
