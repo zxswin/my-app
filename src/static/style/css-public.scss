@@ -59,8 +59,9 @@
 
 /* 禁用效果  */
 @mixin disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
+  background-color: $bg-disabled;
   &:hover {
     border: 1px solid $bdgrey;
   }
@@ -71,6 +72,7 @@
   width: 100%;
   height: $input-height-default;
   border: 1px solid $border-color-default;
+  outline: none;
   transition: all 0.3 ease;
   padding-left: 10px;
 
@@ -82,8 +84,7 @@
     box-shadow: 0 0 1px 3px rgba($primary, 0.3);
   }
   &:disabled {
-    cursor: not-allowed;
-    background-color: $bg-disabled;
+    @include disabled;
   }
 }
 

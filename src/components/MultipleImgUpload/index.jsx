@@ -6,7 +6,9 @@ import './style.scss';
 const getImgUpCompList = fileList => {
   const imgUpCompList = JSON.parse(fileList);
   imgUpCompList.push({
-    src: null,
+    src: '',
+    title: '',
+    des: '',
   });
 
   console.log('imgUpCompList改变了', imgUpCompList);
@@ -15,7 +17,7 @@ const getImgUpCompList = fileList => {
 };
 
 const MultipleImgUpload = props => {
-  const { type, field, label, text, onFileChange, fileList, onFileClose, disabled = false } = props;
+  const { type, field, label, text, onFileChange, fileList, onFileClose, disabled = false, onTextChange, onTitleChange } = props;
 
   const imgUpCompList = useMemo(() => getImgUpCompList(fileList), [fileList]);
 
@@ -29,6 +31,16 @@ const MultipleImgUpload = props => {
 
     [onFileChange]
   );
+
+  // 多媒体标题文本发生改变
+  const onMediaTitleChang = (title, index) => {
+    onTitleChange && onTitleChange(title, index, field);
+  };
+
+  // 多媒体描述文本发生改变
+  const onMediaTextChange = (des, index) => {
+    onTextChange && onTextChange(des, index, field);
+  };
 
   // 点击关闭按钮的时候触发8
   const onCloseHandle = useCallback(
@@ -47,13 +59,15 @@ const MultipleImgUpload = props => {
           key={index}
           closeBtn={disabled || index === imgUpCompList.length - 1 ? false : true}
           field={field}
-          src={item.src}
+          mediaInfo={item}
           type={type}
           label={label}
           onFileChange={fileData => fileChangeHandel(fileData, index)}
           text={text}
           onClose={() => onCloseHandle(index)}
           disabled={disabled}
+          onTextChange={des => onMediaTextChange(des, index)}
+          onTitleChange={title => onMediaTitleChang(title, index)}
         />
       ))}
     </div>

@@ -1,7 +1,9 @@
 import { observable } from 'mobx';
 import _ from 'lodash';
-import { runInAction } from 'mobx';
-import { getProduct } from '../../../../Api';
+import { action, runInAction } from 'mobx';
+import Modal from 'components/Modal';
+import OperationPanel from '../components/OperationPanel';
+import Api from 'Api';
 
 // 默认数据
 export const defaultPanelData = {
@@ -74,7 +76,7 @@ class FishsData {
 
     console.log('获取到的查询参数1', queryData, queryParams);
 
-    const tableDataRes = await getProduct(queryParams);
+    const tableDataRes = await Api.getProduct(queryParams);
     const data = tableDataRes.data.rows;
     const dataTotal = tableDataRes.data.count;
     console.log('查询结果', tableDataRes);
@@ -87,6 +89,127 @@ class FishsData {
       });
     }
   };
+
+  // 点击了修改按钮
+  modifyClick = action((row, index, value) => {
+    this.currentData = row;
+    Modal.showModal({
+      title: '产品修改',
+      children: <OperationPanel panelData={this.currentData} type="modify" />,
+      onConfirm: async () => {
+        const modifyRes = await Api.modifyProduct(this.currentData);
+        const { errmsg } = modifyRes.data;
+        console.log(modifyRes);
+        // 修改成功
+        if (!errmsg) {
+          setTimeout(() => {
+            Modal.showModal({
+              type: 'success',
+              children: <div>修改成功</div>,
+            });
+          }, 300);
+
+          // 重新刷新列表
+          this.onQueryClick(this.queryData);
+          return true;
+        }
+
+        // 修改失败
+        setTimeout(() => {
+          Modal.showModal({
+            type: 'error',
+            children: <div>修改失败{errmsg}</div>,
+          });
+        }, 300);
+        return false;
+      },
+    });
+  });
+
+  // 点击了明细按钮
+  detailClick = action((row, index, value) => {
+    this.currentData = row;
+    Modal.showModal({
+      title: '产品明细',
+      children: <OperationPanel panelData={this.currentData} type="detail" />,
+      showModify: true,
+      onModify: () => {
+        Modal.removeModal();
+        this.modifyClick(row, index, value);
+      },
+    });
+  });
+
+  // 点击了删除按钮
+  deleteClick = action((row, index, value) => {
+    this.currentData = row;
+    Modal.showModal({
+      title: '删除产品',
+      children: <div>你确定要删除{row.name}产品吗？</div>,
+      onConfirm: async () => {
+        const deleteRes = await Api.deleteProduct(this.currentData);
+        const { errmsg } = deleteRes.data;
+        console.log(deleteRes);
+        // 删除成功
+        if (!errmsg) {
+          setTimeout(() => {
+            Modal.showModal({
+              type: 'success',
+              children: <div>删除成功</div>,
+            });
+          }, 300);
+          // 重新刷新列表
+          this.onQueryClick(this.queryData);
+          return true;
+        }
+
+        // 删除失败
+        setTimeout(() => {
+          Modal.showModal({
+            type: 'error',
+            children: <div>删除失败{errmsg}</div>,
+          });
+        }, 300);
+        return true;
+      },
+    });
+  });
+
+  // 点击了新增按钮
+  addClick = action(() => {
+    this.currentData = _.cloneDeep(defaultPanelData);
+    Modal.showModal({
+      title: '产品新增',
+      children: <OperationPanel panelData={this.currentData} type="add" />,
+      onConfirm: async () => {
+        const addRes = await Api.addProduct(this.currentData);
+        const { errmsg } = addRes.data;
+        console.log(addRes);
+        // 新增成功
+        if (!errmsg) {
+          setTimeout(() => {
+            Modal.showModal({
+              type: 'success',
+              children: <div>新增成功</div>,
+            });
+          }, 300);
+
+          // 重新刷新列表
+          this.onQueryClick(this.queryData);
+          return true;
+        }
+
+        // 新增失败
+        setTimeout(() => {
+          Modal.showModal({
+            type: 'error',
+            children: <div>修改失败{errmsg}</div>,
+          });
+        }, 300);
+        return false;
+      },
+    });
+  });
 }
 
 export default FishsData;

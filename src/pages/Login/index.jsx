@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { action } from 'mobx';
 import { observer } from 'mobx-react';
 import Store from '../../store/login';
-import { userLogin } from '../Api/index';
+import Api from '../../Api';
 import './style.scss';
 
 @observer
@@ -23,7 +23,7 @@ class Login extends Component {
 
     console.log('login props', login, this.props, username, password);
 
-    const loginRes = await userLogin(username, password);
+    const loginRes = await Api.userLogin({ username, password });
     const loginMsg = loginRes.data.errmsg;
 
     console.log('loginRes', loginRes);

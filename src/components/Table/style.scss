@@ -113,6 +113,7 @@ $sort-icon-color: rgb(191, 191, 191);
         .UI-Table__table--cell--txt {
           text-align: center;
           display: inline-block;
+          width: 100%;
           span {
             @include ellipsis;
             max-width: 80%;

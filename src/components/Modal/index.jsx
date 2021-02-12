@@ -16,6 +16,9 @@ const Modal = props => {
     cancelText = '取消', // 取消按钮文案
     type = 'confirm', // modal弹出框类型 confirm info success warning error
     tipConfirmText = '知道了', // 确认框提示按钮文案
+    modifyText = '修改',
+    onModify, // 点击修改按钮的时候触发
+    showModify = false, // 显示修改按钮
   } = props;
 
   // 内部控制弹出框是否展示
@@ -86,6 +89,11 @@ const Modal = props => {
     }
   }, [onConfirm]);
 
+  // 点击修改按钮
+  const clickModifyHandle = useCallback(() => {
+    onModify && onModify();
+  }, [onModify]);
+
   // 关闭弹出窗口
   function removeModal() {
     setToShow(false);
@@ -107,7 +115,8 @@ const Modal = props => {
                 <div className="UI-Modal__contain--body">{children}</div>
                 <div className="UI-Modal__contain--footer">
                   <Button onClick={clickCancelHandle} theme="white" text={cancelText} />
-                  <Button onClick={clickConfirmHandle} text={confirmText} />
+                  {!showModify && <Button onClick={clickConfirmHandle} text={confirmText} />}
+                  {showModify && <Button onClick={clickModifyHandle} text={modifyText} />}
                 </div>
               </React.Fragment>
             )}

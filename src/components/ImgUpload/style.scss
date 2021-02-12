@@ -2,7 +2,7 @@
 @import '../../static/style/css-public.size.scss';
 @import '../../static//style//css-public.scss';
 
-$preview-size: 120px;
+$preview-size: 240px;
 $margin-size: 10px;
 $close-btn-size: 25px;
 
@@ -13,8 +13,12 @@ $close-btn-size: 25px;
   .UI-ImgUpload--lable {
     margin: 10px 0;
   }
-  .UI-ImgUpload--img-name {
+  .UI-ImgUpload--text {
+    width: 100%;
     padding-bottom: 5px;
+    .UI-ImgUpload--title {
+      margin-bottom: 10px;
+    }
   }
   .UI-ImgUpload--preview {
     position: relative;
@@ -37,7 +41,7 @@ $close-btn-size: 25px;
     right: 0;
     width: $close-btn-size;
     height: $close-btn-size;
-    border: 1px solid $primary;
+    border: 1px solid $black;
     border-radius: 50%;
     overflow: hidden;
     cursor: pointer;
@@ -46,10 +50,8 @@ $close-btn-size: 25px;
       display: inline-block;
       width: 80%;
       height: 80%;
-      background-color: $primary;
-      mask-image: url(../../static/icon/ui/icon-close.svg);
-      mask-repeat: no-repeat;
-      mask-size: contain;
+      background: url(../../static/icon/ui/icon-close.svg);
+      background-size: contain;
     }
   }
 }

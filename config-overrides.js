@@ -49,5 +49,6 @@ module.exports = override(
   addWebpackAlias({
     '@': path.resolve(__dirname, 'src'),
     components: path.resolve(__dirname, 'src/components'),
+    Api: path.resolve(__dirname, 'src/Api'),
   })
 );

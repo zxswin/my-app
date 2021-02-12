@@ -1,0 +1,13 @@
+@import '../../static/style/css-public.color.scss';
+@import '../../static/style/css-public.size.scss';
+@import '../../static//style//css-public.scss';
+
+.UI-Textarea {
+  $boder-color: $border-color-default;
+  width: 100%;
+  .UI-Textarea__textarea {
+    @include defaultInput;
+    height: 66px;
+    border: 1px solid $boder-color;
+  }
+}
