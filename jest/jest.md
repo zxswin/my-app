@@ -177,3 +177,60 @@ module.exports = {
 
 // 所以本文最开始所说的“一处配置问题”就是这儿，删掉 transformIgnorePatterns 转而使用 moduleNameMapper 会快很多，不信你试试！
 ```
+
+
+## 配置项详解
+
+```js
+//添加"jest"的配置 --- jest.config.js
+module.exports = {
+  globals: {
+    REACT_APP_ENV: 'pro',
+  }, // jest的全局变量
+  coverageThreshold: {
+    global: {
+      branches: 50,
+      functions: 50,
+      lines: 50,
+      statements: 50,
+    }, 
+  }, // 配置覆盖结果的最低阈值
+  roots: ['<rootDir>/src'], // 设置主目录
+  setupFiles: ['<rootDir>/src/config/jest/setupTests.js'], // 运行测试前可执行的脚本（比如注册enzyme的兼容）
+  clearMocks: true, // 在每个测试前自动清理mock的调用和实例instance。等效于在每个test之前调用
+  coverageDirectory: 'coverage', // Jest输出覆盖率以及添加输出覆盖率文件的名称utils
+  collectCoverageFrom: ['<rootDir>/src/**/*.{js,jsx,tsx,ts}'], // 哪些文件需要收集覆盖率信息<rootDir>/src/**/*.{js,jsx,tsx,ts}
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    '<rootDir>/src/interfaceTypes',
+    '<rootDir>/src/app.tsx',
+    '<rootDir>/src/app.config.ts',
+    '<rootDir>/src/typings.d.ts',
+    '<rootDir>/src/components/Calendar/',
+    '<rootDir>/src/components/Qrcode/',
+    '<rootDir>/src/components/Painter/',
+    '<rootDir>/src/config/jest/',
+    '<rootDir>/src/store/',
+  ], // 统计覆盖信息时需要忽略的文件
+  coverageProvider: 'babel', // 声明到底用哪个provider来用于指导代码的覆盖测试
+  testPathIgnorePatterns: [
+    '<rootDir>/.next/',
+    '<rootDir>/node_modules/',
+    '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$',
+  ], // 转换时需忽略的文件
+  // rootDir: __dirname,
+  // verbose: true, // 是否应在运行期间报告每个单独的测试。执行后，所有错误也仍将显示在底部。
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'], // 代表支持加载的文件名
+  moduleNameMapper: {
+    '@tarojs/components': '@tarojs/components/dist-h5/react',
+    '^.+\\.(css|scss|less)$': '<rootDir>/src/config/jest/style-mock.js',
+    '@/(.*)$': '<rootDir>/src/$1',
+  }, // 代表需要被 Mock 的资源名称。如果需要 Mock 静态资源（如less、scss等），则需要配置 Mock 的路径
+  testMatch: ['<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}'], // Jest用于检测测试文件的全局模式
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': '<rootDir>/node_modules/babel-jest',
+  }, // 用于编译 ES6/ES7 语法
+  transformIgnorePatterns: ['^.+\\.(css|sass|scss|less)$', '<rootDir>/dist/'], // 忽略转换
+};
+
+```
