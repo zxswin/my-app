@@ -1,0 +1,34 @@
+@import './static/style/index.scss';
+
+.App {
+  width: 100vw;
+  height: 100vh;
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  color: $default;
+  font-size: $font-size-main;
+
+  a {
+    color: $default;
+  }
+
+  .linkbox {
+    border: 1px solid #f00;
+    height: 60px;
+    margin-bottom: 20px;
+
+    a {
+      margin-right: 20px;
+    }
+  }
+
+  .contain {
+    border: 1px solid #f00;
+    padding: 10px;
+  }
+
+  .active {
+    color: red;
+  }
+}

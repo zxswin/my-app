@@ -1,0 +1,16 @@
+@import '../../../styles/variable.scss';
+@import '../../../styles/public.scss';
+.FormInput {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 40px;
+  color: $default;
+  .label {
+    width: 120px;
+    margin-right: 10px;
+  }
+  .percent {
+    margin-left: 20px;
+  }
+}

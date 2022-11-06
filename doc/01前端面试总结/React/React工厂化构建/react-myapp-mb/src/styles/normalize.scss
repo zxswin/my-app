@@ -1,0 +1,215 @@
+/* 标签样式初始化代码 */
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video,
+input,
+textarea {
+  border: none;
+  font-family: PingFangSC, PingFangSC-Regular, 'Microsoft YaHei', 微软雅黑, STXihei, 华文细黑, Georgia, 'Times New Roman', serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-weight: normal;
+  &:focus {
+    border: none;
+    outline: none;
+  }
+}
+
+/* html,body标签样式初始化  */
+html,
+body {
+  height: 100vh;
+  width: 100vw;
+}
+/* 标签字体初始化 */
+address,
+caption,
+cite,
+code,
+dfn,
+em,
+strong,
+th,
+var {
+  font-style: normal;
+  font-weight: normal;
+}
+
+/* 初始化a标签*/
+a {
+  text-decoration: none;
+}
+a:link {
+  color: #000;
+}
+a:visited {
+  color: #000;
+}
+a:hover {
+  color: #000;
+}
+a:active {
+  color: #000;
+}
+/* input 标签初始化  */
+input::-ms-clear {
+  display: none;
+}
+input::-ms-reveal {
+  display: none;
+}
+
+/* input,button标签初始化  */
+input,
+button {
+  -webkit-appearance: none;
+  margin: 0;
+  outline: none;
+  padding: 0;
+  border-radius: 0;
+  border: none;
+}
+
+/* 去掉iPhone、iPad的默认按钮样式 */
+input[type='button'],
+input[type='submit'],
+input[type='reset'] {
+  -webkit-appearance: none;
+}
+
+textarea {
+  -webkit-appearance: none;
+}
+
+input::-webkit-input-placeholder {
+  color: #ccc;
+}
+input::-ms-input-placeholder {
+  color: #ccc;
+}
+input::-moz-placeholder {
+  color: #ccc;
+}
+input[type='submit'],
+input[type='button'] {
+  cursor: pointer;
+}
+button[disabled],
+input[disabled] {
+  cursor: default;
+}
+
+/* 去除Chrome等浏览器文本框默认发光边框 */
+input:focus,
+textarea:focus {
+  outline: none;
+}
+
+/* 去掉高光样式 */
+input:focus {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-user-modify: read-write-plaintext-only;
+}
+/* 禁止多行文本框textarea拖拽 */
+textarea {
+  resize: none;
+}
+
+textarea {
+  resize: none;
+}
+
+/* 图片的初始化样式 */
+img {
+  border: none;
+  display: block;
+  width: 100%;
+}
+/* ul,ol,li标签初始化 */
+ul,
+ol,
+li {
+  list-style-type: none;
+}
+/* table标签初始化 */
+table {
+  border-collapse: collapse;
+}

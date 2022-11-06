@@ -1,0 +1,16 @@
+@import '../../styles/variable.scss';
+.Contact {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 56px $globalMargin;
+  h2 {
+    width: 100%;
+    font-size: 40px;
+    text-align: left;
+  }
+  .red {
+    color: red;
+  }
+}

@@ -1,0 +1,54 @@
+@import '../../../styles/variable.scss';
+@import '../../../styles/public.scss';
+.Loader {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  $size: 120px;
+
+  .LoaderContent {
+    width: $size;
+    height: $size;
+  }
+
+  %subLoader {
+    height: $size;
+    width: $size;
+    border: 5px solid $icon-grey;
+    border-bottom-color: transparent;
+    border-top-color: transparent;
+    border-radius: 100%;
+    animation-fill-mode: both;
+    animation: rotate 1s 0s ease-in-out infinite;
+    position: absolute;
+  }
+  .bigLoader {
+    @extend %subLoader;
+  }
+
+  .smallLoader {
+    @extend %subLoader;
+    animation-duration: 0.5s;
+    border-color: $icon-grey transparent $icon-grey transparent;
+    animation-direction: reverse;
+  }
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg) scale(1);
+    }
+
+    50% {
+      transform: rotate(180deg) scale(0.6);
+    }
+
+    100% {
+      transform: rotate(360deg) scale(1);
+    }
+  }
+}

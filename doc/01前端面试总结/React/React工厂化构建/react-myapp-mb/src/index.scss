@@ -1,0 +1,23 @@
+@import './styles/variable.scss';
+@import './styles/index.scss';
+
+body,
+html {
+  /* prettier-ignore */
+  max-width: 500PX;
+  /* prettier-ignore */
+  min-width: 320PX;
+  margin: 0 auto;
+  font-size: $normalSize;
+  background: $white;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  color: $default;
+}
+
+/** 隐藏滚动条 */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}

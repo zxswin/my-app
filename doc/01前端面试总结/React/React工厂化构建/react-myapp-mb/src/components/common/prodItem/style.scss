@@ -1,0 +1,62 @@
+@import '../../../styles/variable.scss';
+@import '../../../styles/public.scss';
+.ProdItem {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: $globalMargin;
+  .img {
+    width: 170px;
+    margin-right: 10px;
+    position: relative;
+
+    img {
+      opacity: 0;
+    }
+
+    .imgShow {
+      opacity: 1;
+    }
+  }
+  .content {
+    flex: 1;
+    & > div {
+      margin-bottom: 10px;
+    }
+    .title {
+      font-size: $titleSize;
+    }
+    .describe {
+      color: $describe;
+      font-size: $describeSize;
+      @extend %mul-text-ellipsis;
+    }
+    .priceContain {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .price {
+        color: $primary;
+      }
+    }
+    .buttonContain {
+      position: relative;
+      .currShopAmout {
+        position: absolute;
+        top: -32px;
+        right: -6px;
+        color: $white;
+        background: $primary;
+        min-width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 100px;
+        border: 4px solid $white;
+        font-size: 32px;
+      }
+    }
+  }
+}

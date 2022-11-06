@@ -1,0 +1,34 @@
+@import '../../../styles/variable.scss';
+
+.ShopCarWeget {
+  width: 100px;
+  height: 100px;
+  padding: 20px;
+  position: absolute;
+  bottom: 180px;
+  left: 50px;
+  background: $white;
+  border: 4px solid $primary;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  .shopTotalAmout {
+    min-width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: $primary;
+    color: $white;
+    border: 4px solid $primary;
+    position: absolute;
+    top: -30px;
+    right: -20px;
+    border-radius: 50%;
+  }
+  .IconSvg {
+    width: 100%;
+    height: 100%;
+  }
+}

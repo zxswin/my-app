@@ -1,0 +1,23 @@
+@import '../../../styles/variable.scss';
+@import '../../../styles/public.scss';
+.Button {
+  @extend %defaultBtn;
+
+  &.primary {
+    @extend %primaryBtn;
+  }
+  &.default {
+    @extend %defaultTypeBtn;
+  }
+
+  &.defaultSize {
+    height: 60px;
+    width: 160px;
+  }
+
+  &.fullSize {
+    height: 96px;
+    width: 100%;
+    font-size: 38px;
+  }
+}

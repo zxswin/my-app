@@ -1,0 +1,9 @@
+@import '../../static/style/css-public.color.scss';
+
+.HomePage-FooterBar {
+  width: 100%;
+  .HomePage-FooterBar-contain {
+    height: 60px;
+    border: 1px solid $boder-color-grey;
+  }
+}

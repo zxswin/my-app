@@ -1,0 +1,6 @@
+@import '../../../styles/variable.scss';
+@import '../../../styles/public.scss';
+.Input {
+  @extend %defaultInput;
+  flex: 1;
+}

@@ -1,0 +1,33 @@
+/* 主题颜色 */
+$theme: #1890ff; // 主题颜色
+$primary: $theme; // 主要颜色
+$black: #000;
+$default: rgba(0, 0, 0, 0.85); // 普通颜色
+$secondary: rgba(0, 0, 0, 0.45); // 次要颜色
+$success: #52c41a; // 成功颜色
+$warning: #faad14; // 警告颜色
+$danger: #ff4d4f; // 危险颜色
+$disabled: rgba(0, 0, 0, 0.25); // 禁用颜色
+$bgdisabled: rgb(245, 245, 245);
+$bgmark: #ffe58f; // 标记背景颜色
+$grey: #f2f4f5; // 灰色
+$bdgrey: #d9d9d9; // 边框色
+$white: #fff; // 白色
+$icon-grey: #a2a2a2;
+$opcity: rgba(0, 0, 0, 0.4);
+
+/* 背景颜色 */
+$bg-grey: $grey; // 灰色背景
+$bg-disabled: $bgdisabled; // 禁用背景色
+$bg-mark: $bgmark; // 标记背景颜色
+
+/* 边框颜色 */
+$border-color-default: $bdgrey; // 默认边框颜色
+$boder-color-grey: #f0f0f0; // 灰色边框色
+$boder-color-disabled: $bdgrey; // 禁用边框色
+
+/* 字体颜色 */
+$font-color-main: $default; // 主要文字颜色
+$font-color-less: $secondary; // 次要文字颜色
+$font-color-disabled: $disabled; // 禁用文字颜色
+$font-color-mark: #c41d7f; // 标记颜色

@@ -1,0 +1,14 @@
+{
+  "editor.fontSize": 16,
+  "window.zoomLevel": 1,
+  "prettier.singleQuote": true,
+  "prettier.semi": true,
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "editor.formatOnPaste": true,
+  "explorer.confirmDelete": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.validate": ["javascript", "typescript"]
+}

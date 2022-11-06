@@ -1,0 +1,85 @@
+@import '../../../styles/variable.scss';
+@import '../../../styles/public.scss';
+.OrderDetail {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: $globalMargin;
+  .title {
+    font-size: 46px;
+    margin-bottom: 20px;
+  }
+  .orderListContain {
+    height: 90%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-bottom: 200px;
+    .orderItem {
+      border-bottom: 1px solid $borderGrey;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+    }
+    .orderItemName {
+      width: 320px;
+      span {
+        display: block;
+        margin-bottom: 10px;
+      }
+      .standard {
+        color: $describe;
+        font-size: $describeSize;
+      }
+    }
+    .orderItemPrice {
+      width: 250px;
+      text-align: left;
+      span {
+        margin-right: 8px;
+      }
+    }
+    .orderItemTotalPrice {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      span {
+        text-align: left;
+        min-width: 150px;
+      }
+    }
+    .orderSummary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
+  }
+  .bottomBtn {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 136px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: $white;
+    box-shadow: -0 0 20px rgba(0, 0, 0, 0.5);
+    .totalPrice {
+      font-size: 46px;
+      font-weight: bold;
+      margin-left: 30px;
+    }
+    .buttonContain {
+      height: 100%;
+      width: 250px;
+      .confirmBtn {
+        height: 100%;
+        width: 100%;
+        border-radius: 0;
+      }
+    }
+  }
+}

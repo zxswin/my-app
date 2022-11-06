@@ -1,0 +1,11 @@
+.RouterSubLink {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  .subnav-link-item {
+    .active-select {
+      color: red;
+    }
+  }
+}

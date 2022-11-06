@@ -1,0 +1,37 @@
+@import '../../../styles/variable.scss';
+
+.MaskBox {
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 101;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .contain {
+    width: 95vw;
+    height: 95vh;
+    background: $white;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .bottomContain {
+    width: 100vw;
+    background: $white;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+  .IconSvg {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+  }
+}

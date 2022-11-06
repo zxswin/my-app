@@ -1,0 +1,11 @@
+.ProductLists {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  .leftPanel {
+    width: 170px;
+  }
+  .rightPanel {
+    flex: 1;
+  }
+}

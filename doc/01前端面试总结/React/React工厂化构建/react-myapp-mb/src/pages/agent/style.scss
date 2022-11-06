@@ -1,0 +1,45 @@
+@import '../../styles/variable.scss';
+
+.Agent {
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding-bottom: 360px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $globalMargin;
+
+  .title {
+    width: 100%;
+    text-align: center;
+    font-size: 50px;
+    color: $default;
+    margin-bottom: 60px;
+  }
+  .err {
+    width: 100%;
+    text-align: center;
+    color: $danger;
+    margin-bottom: 30px;
+  }
+  .setContent {
+    width: 100%;
+    margin-top: -200px;
+  }
+
+  .agentContain {
+    width: 100%;
+    margin-top: -200px;
+  }
+  .buttonContain {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    .label {
+      width: 120px;
+      margin-right: 30px;
+    }
+  }
+}

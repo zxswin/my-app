@@ -1,0 +1,45 @@
+@import '../../../styles/variable.scss';
+
+.IconSvg {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: $white;
+  border-radius: 50%;
+  .closeIcon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    background-color: $icon-grey;
+  }
+  .icon-close {
+    mask-image: url(../../../static/svg/close.svg);
+  }
+  &.add {
+    border: 2px solid $primary;
+    padding: 10px;
+  }
+  .icon-add {
+    mask-image: url(../../../static/svg/add.svg);
+    background-color: $primary;
+  }
+  &.minus {
+    border: 2px solid $icon-grey;
+    padding: 10px;
+  }
+  .icon-minus {
+    mask-image: url(../../../static/svg/minus.svg);
+  }
+  .icon-shopCar {
+    mask-image: url(../../../static/svg/shopCar.svg);
+    background-color: $default;
+  }
+  .icon-delete {
+    mask-image: url(../../../static/svg/delete.svg);
+    background-color: $greyText;
+  }
+}

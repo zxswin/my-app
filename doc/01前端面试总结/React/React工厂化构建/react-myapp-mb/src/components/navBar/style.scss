@@ -1,0 +1,54 @@
+@import '../../styles/variable.scss';
+
+.NavBar {
+  display: flex;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  justify-content: space-around;
+  align-items: center;
+  font-size: $titleSize;
+  background: $white;
+  padding-top: 6px;
+  padding-bottom: 3px;
+  box-shadow: 0 0 16px #000;
+  a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 6px;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+  }
+  .prod {
+    mask-image: url(../../static/svg/menu/icon_prod.svg);
+    background: $describe;
+  }
+  .dried {
+    mask-image: url(../../static/svg/menu/icon_dried.svg);
+    background: $describe;
+  }
+  .hot {
+    mask-image: url(../../static/svg/menu/icon_hot_sale.svg);
+    background: $describe;
+  }
+  .mine {
+    mask-image: url(../../static/svg/menu/icon_mine.svg);
+    background: $describe;
+  }
+  .activeprod,
+  .activedried,
+  .activehot,
+  .activemine {
+    background: $primary;
+  }
+
+  .activeSelect {
+    color: $primary;
+  }
+}

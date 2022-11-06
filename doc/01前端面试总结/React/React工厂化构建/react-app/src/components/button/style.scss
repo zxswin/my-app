@@ -1,0 +1,10 @@
+@import '../../static/style/css-public.scss';
+@import '../../static/style/css-public.color.scss';
+.UI-Button {
+  &.blur {
+    @include primaryButton;
+  }
+  &.white {
+    @include defaultButton;
+  }
+}
